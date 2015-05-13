@@ -1,0 +1,19 @@
+redmine:
+  restart: allways
+  build: redmine
+  volumes:
+     - /opt/redmine/data:/home/redmine/data
+  ports:
+    - "80:80"
+  env_file:
+    - .redmine.secret
+  links:
+    - mysql
+
+mysql:
+  restart: allways
+  image: sameersbn/mysql
+  volumes:
+     - /opt/mysql/data:/var/lib/mysql
+  env_file:
+     - .mysql.secret
