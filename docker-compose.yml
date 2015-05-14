@@ -1,8 +1,8 @@
 redmine:
   restart: allways
   build: redmine
-  volumes:
-     - /opt/redmine/data:/home/redmine/data
+  volumes_from:
+    - data
   ports:
     - "80:80"
   env_file:
@@ -13,7 +13,11 @@ redmine:
 mysql:
   restart: allways
   image: sameersbn/mysql
-  volumes:
-     - /opt/mysql/data:/var/lib/mysql
+  volumes_from:
+    - data
   env_file:
-     - .mysql.secret
+    - .mysql.secret
+
+data:
+  build: data
+  user: 1000
