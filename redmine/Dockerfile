@@ -21,7 +21,8 @@ RUN echo > plugins/redmine_helpdesk/Gemfile
 #install the theme
 RUN git clone git://github.com/eea/eea.redmine.theme.git public/themes/eea.redmine.theme
 
-#install eea tools
-ADD install_tools.sh /home/redmine/redmine/install_tools.sh
-RUN chmod +x install_tools.sh
+#install eea tools and start services
+ADD startup.sh /home/redmine/redmine/startup.sh
+RUN chmod +x /home/redmine/redmine/startup.sh
+ENTRYPOINT /home/redmine/redmine/startup.sh
 
