@@ -24,7 +24,7 @@ RUN echo > plugins/redmine_helpdesk/Gemfile
 RUN git clone git://github.com/eea/eea.redmine.theme.git public/themes/eea.redmine.theme
 
 #github sync script
-RUN svn co https://svn.eionet.europa.eu/repositories/Zope/trunk/www.eea.europa.eu/trunk/tools/redmine github
+RUN svn co https://svn.eionet.europa.eu/repositories/Zope/trunk/www.eea.europa.eu/trunk/tools/redmine /home/redmine/redmine/github
 
 #install eea tools and start services
 ADD startup.sh /home/redmine/redmine/startup.sh
