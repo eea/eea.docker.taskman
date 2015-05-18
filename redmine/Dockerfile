@@ -1,13 +1,15 @@
 FROM sameersbn/redmine
 
-ENV REDMINE_DATA /var/redmine_data
-ENV REDMINE_GITHUB /var/redmine_github
+#default for ENV vars
+DB_NAME=redmine_production
+DB_USER=redmine
+DB_PASS=password
+REDMINE_EMAIL_HOST=host
+REDMINE_EMAIL_USERNAME=username
+REDMINE_EMAIL_PASSWORD=password
 
-RUN apt-get update
-
-RUN apt-get install -y git
-RUN apt-get install -y subversion
-RUN apt-get install -y graphviz
+# install dependencies
+RUN apt-get update && apt-get install -y git subversion graphviz
 RUN ln -s /home/redmine/redmine /var/local/redmine
 
 #install the plugins
@@ -21,8 +23,14 @@ RUN echo > plugins/redmine_helpdesk/Gemfile
 #install the theme
 RUN git clone git://github.com/eea/eea.redmine.theme.git public/themes/eea.redmine.theme
 
+#github sync script
+svn co https://svn.eionet.europa.eu/repositories/Zope/trunk/www.eea.europa.eu/trunk/tools/redmine github
+
 #install eea tools and start services
 ADD startup.sh /home/redmine/redmine/startup.sh
 RUN chmod +x /home/redmine/redmine/startup.sh
-ENTRYPOINT /home/redmine/redmine/startup.sh
+ADD helpdesk.sh /home/redmine/redmine/helpdesk.sh
+RUN chmod +x /home/redmine/redmine/helpdesk.sh
+ADD cronjobs /etc/cron.d/cronjobs
 
+ENTRYPOINT /home/redmine/redmine/startup.sh
