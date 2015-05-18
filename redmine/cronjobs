@@ -1,2 +1,2 @@
-*/15 9-19 * * 1-5 cd /var/local/redmine/github/ && ./update.sh > /dev/null 2>&1
-*/2 * * * * cd /var/local/redmine && ./helpdesk.sh > /dev/null 2>&1
+*/15 9-19 * * 1-5 root cd /var/local/redmine/github/ && ./update.sh > /dev/null 2>&1
+*/2 * * * * root cd /var/local/redmine && ./helpdesk.sh > /dev/null 2>&1
