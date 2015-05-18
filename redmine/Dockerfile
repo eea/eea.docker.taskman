@@ -31,6 +31,6 @@ ADD startup.sh /home/redmine/redmine/startup.sh
 RUN chmod +x /home/redmine/redmine/startup.sh
 ADD helpdesk.sh /home/redmine/redmine/helpdesk.sh
 RUN chmod +x /home/redmine/redmine/helpdesk.sh
-ADD cronjobs /etc/cron.d/cronjobs
+ADD cronjobs /var/spool/cron/crontabs/root
 
 ENTRYPOINT /home/redmine/redmine/startup.sh
