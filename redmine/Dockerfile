@@ -23,14 +23,14 @@ RUN echo > plugins/redmine_helpdesk/Gemfile
 #install the theme
 RUN git clone git://github.com/eea/eea.redmine.theme.git public/themes/eea.redmine.theme
 
-#github sync script
-RUN svn co https://svn.eionet.europa.eu/repositories/Zope/trunk/www.eea.europa.eu/trunk/tools/redmine /home/redmine/redmine/github
-
 #install eea tools and start services
 ADD startup.sh /home/redmine/redmine/startup.sh
 RUN chmod +x /home/redmine/redmine/startup.sh
 ADD helpdesk.sh /home/redmine/redmine/helpdesk.sh
 RUN chmod +x /home/redmine/redmine/helpdesk.sh
-ADD cronjobs /var/spool/cron/crontabs/root
+
+#add cron jobs
+ADD cronjobs /tmp/cronjobs
+RUN crontab -u redmine /tmp/cronjobs && rm -rf /tmp/cronjobs
 
 ENTRYPOINT /home/redmine/redmine/startup.sh
