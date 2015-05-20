@@ -4,9 +4,6 @@ FROM sameersbn/redmine
 ENV DB_NAME=redmine_production
 ENV DB_USER=redmine
 ENV DB_PASS=password
-ENV REDMINE_EMAIL_HOST=host
-ENV REDMINE_EMAIL_USERNAME=username
-ENV REDMINE_EMAIL_PASSWORD=password
 
 # install dependencies
 RUN apt-get update && apt-get install -y git subversion graphviz
