@@ -1,18 +1,15 @@
 FROM busybox
 
-ENV MYSQL_DATA /var/lib/mysql
-RUN mkdir -p $MYSQL_DATA
-RUN chown -R 1000:1000 $MYSQL_DATA
-VOLUME $MYSQL_DATA
+RUN mkdir -p /var/lib/mysql
+RUN chown -R 1000:1000 /var/lib/mysql
+VOLUME /var/lib/mysql
 
-ENV REDMINE_DATA /home/redmine/data
-RUN mkdir -p $REDMINE_DATA
-RUN chown -R 1000:1000 $REDMINE_DATA
-VOLUME $REDMINE_DATA
+RUN mkdir -p /home/redmine/data
+RUN chown -R 1000:1000 /home/redmine/data
+VOLUME /home/redmine/data
 
-ENV REDMINE_GITHUB /home/redmine/redmine/github
-RUN mkdir -p $REDMINE_GITHUB
-RUN chown -R 1000:1000 $REDMINE_GITHUB
-VOLUME $REDMINE_GITHUB
+RUN mkdir -p /home/redmine/redmine/github
+RUN chown -R 1000:1000 /home/redmine/redmine/github
+VOLUME /home/redmine/redmine/github
 
 USER 1000
