@@ -24,6 +24,8 @@ ADD startup.sh /home/redmine/redmine/startup.sh
 RUN chmod +x /home/redmine/redmine/startup.sh
 ADD helpdesk.sh /home/redmine/redmine/helpdesk.sh
 RUN mkdir -p /var/log/helpdesk && chown redmine:redmine /var/log/helpdesk && chmod +x /home/redmine/redmine/helpdesk.sh
+ADD taskman_email.sh /home/redmine/redmine/taskman_email.sh
+RUN chmod +x /home/redmine/redmine/taskman_email.sh
 
 #add cron jobs
 ADD cronjobs /tmp/cronjobs
