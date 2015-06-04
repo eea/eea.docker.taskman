@@ -1,17 +1,20 @@
 redmine:
-  restart: allways
+  restart: always
   build: redmine
   volumes_from:
     - data
+  volumes:
+    - redmine/.email.secret:/var/local/environment/vars
   ports:
     - "80:80"
   env_file:
     - .redmine.secret
   links:
     - mysql
+    - postfix
 
 mysql:
-  restart: allways
+  restart: always
   image: sameersbn/mysql
   volumes_from:
     - data
@@ -19,6 +22,12 @@ mysql:
     - backup/:/var/local/backup/
   env_file:
     - .mysql.secret
+
+postfix:
+  restart: always
+  image: eeacms/postfix:eionet
+  env_file:
+    - .postfix.secret
 
 data:
   build: data

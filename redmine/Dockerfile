@@ -19,6 +19,10 @@ RUN git clone https://github.com/tckz/redmine-wiki_graphviz_plugin.git plugins/w
     #install the theme
     git clone git://github.com/eea/eea.redmine.theme.git public/themes/eea.redmine.theme
 
+#add configuration file
+ADD configuration.yml /home/redmine/redmine/config/configuration.yml
+RUN chmod +r /home/redmine/redmine/config/configuration.yml & chown redmine:redmine /home/redmine/redmine/config/configuration.yml
+
 #install eea tools and start services
 ADD startup.sh /home/redmine/redmine/startup.sh
 RUN chmod +x /home/redmine/redmine/startup.sh
