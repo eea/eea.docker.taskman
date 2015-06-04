@@ -17,10 +17,10 @@ Edit configuration files
 
     $ vim .mysql.secret
     $ vim .redmine.secret
-    $ # edit email configuration for helpdesk 
-    $ vim redmine/helpdesk.sh
-    $ # edit email configuration for taskman
-    $ vim redmine/taskman_email.sh
+    $ # edit email configuration for helpdesk and taskman accounts
+    $ vim redmine/.email.secret
+    $ # edit email configuration for redmine
+    $ vim .postfix.secret
     
 Start containers
 
