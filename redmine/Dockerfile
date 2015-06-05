@@ -17,19 +17,26 @@ RUN git clone https://github.com/tckz/redmine-wiki_graphviz_plugin.git plugins/w
     #workaround to don't have as dependency the codeclimate-test-reporter gem
     echo > plugins/redmine_helpdesk/Gemfile && \
     #install the theme
-    git clone git://github.com/eea/eea.redmine.theme.git public/themes/eea.redmine.theme
+    git clone git://github.com/eea/eea.redmine.theme.git public/themes/eea.redmine.theme && \
+    chown -R redmine:redmine plugins public/themes
 
 #add configuration file
 ADD configuration.yml /home/redmine/redmine/config/configuration.yml
-RUN chmod +r /home/redmine/redmine/config/configuration.yml & chown redmine:redmine /home/redmine/redmine/config/configuration.yml
+RUN chmod +r /home/redmine/redmine/config/configuration.yml && \
+    chown redmine:redmine /home/redmine/redmine/config/configuration.yml
 
 #install eea tools and start services
 ADD startup.sh /home/redmine/redmine/startup.sh
-RUN chmod +x /home/redmine/redmine/startup.sh
+RUN chmod +x /home/redmine/redmine/startup.sh && \
+    chown redmine:redmine /home/redmine/redmine/startup.sh
 ADD helpdesk.sh /home/redmine/redmine/helpdesk.sh
-RUN mkdir -p /var/log/helpdesk && chown redmine:redmine /var/log/helpdesk && chmod +x /home/redmine/redmine/helpdesk.sh
+RUN mkdir -p /var/log/helpdesk && \
+    chown redmine:redmine /var/log/helpdesk && \
+    chmod +x /home/redmine/redmine/helpdesk.sh && \
+    chown redmine:redmine /home/redmine/redmine/helpdesk.sh
 ADD taskman_email.sh /home/redmine/redmine/taskman_email.sh
-RUN chmod +x /home/redmine/redmine/taskman_email.sh
+RUN chmod +x /home/redmine/redmine/taskman_email.sh && \
+    chown redmine:redmine /home/redmine/redmine/taskman_email.sh
 
 #add cron jobs
 ADD cronjobs /tmp/cronjobs
