@@ -6,7 +6,7 @@ redmine:
   volumes:
     - redmine/.email.secret:/var/local/environment/vars
   ports:
-    - "80:80"
+    - "8888:80"
   env_file:
     - .redmine.secret
   links:
