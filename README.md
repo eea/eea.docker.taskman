@@ -13,7 +13,15 @@ Clone the repository
     $ git clone https://github.com/eea/eea.docker.redmine
     $ cd eea.docker.redmine
     
-Edit configuration files
+During the first time deployement, create the secret environment files
+
+    $ # copy the .secret.example files
+    $ cp .mysql.secret.example .mysql.secret
+    $ cp .redmine.secret.example .redmine.secret
+    $ cp .postfix.secret.example .postfix.secret
+    $ cp redmine/.email.secret.example redmine/.email.secret
+
+Edit the secret files with real settings
 
     $ vim .mysql.secret
     $ vim .redmine.secret
@@ -24,7 +32,7 @@ Edit configuration files
     
 Start containers
 
-    $ docker-compose up
+    $ docker-compose up -d
 
 ### Import data
 Import files
@@ -44,9 +52,9 @@ Import database (replace db_production, user, pass with your values)
       "tar xvf /var/local/backup/dump.sql.tgz && mysql -uuser -ppass db_production < dump.sql"
     $ docker-compose stop mysql
     
-Run containers
+Start containers
 
-    $ docker-compose up
+    $ docker-compose up -d
 
 ## How-tos
 ### How to add repository to redmine
@@ -71,7 +79,7 @@ from https://github.com/eea every 5 minutes (see */etc/cron.d/sync_git_repos* an
 
 If it still doesn't update automatically after a while:
 * login to the docker host and become root
-* enter the redmine container (docker exec -it redmine bash)
+* enter the redmine container (docker exec -it eeadockerredmine_redmine_1 bash)
 * cd /var/local/redmine/github
 * git clone --mirror https://github.com/eea/eea.mypackage.git
 * cd eea.mypackage.git
