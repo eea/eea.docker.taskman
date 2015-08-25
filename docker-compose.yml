@@ -35,4 +35,4 @@ postfix:
 
 data:
   build: data
-  user: 1000
+  user: "1000"
