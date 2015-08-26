@@ -19,6 +19,7 @@ During the first time deployement, create the secret environment files
     $ cp .mysql.secret.example .mysql.secret
     $ cp .redmine.secret.example .redmine.secret
     $ cp .postfix.secret.example .postfix.secret
+    $ cp .memcached.secret.example .memcached.secret
     $ cp redmine/.email.secret.example redmine/.email.secret
 
 Edit the secret files with real settings
@@ -29,6 +30,8 @@ Edit the secret files with real settings
     $ vim redmine/.email.secret
     $ # edit email configuration for redmine
     $ vim .postfix.secret
+    $ # edit memcached configuration
+    $ vim .memcached.secret
     
 Start containers
 

@@ -13,6 +13,7 @@ redmine:
   links:
     - mysql
     - postfix
+    - memcached
 
 mysql:
   restart: always
@@ -32,6 +33,14 @@ postfix:
     - /etc/localtime:/etc/localtime:ro
   env_file:
     - .postfix.secret
+
+memcached:
+  restart: always
+  image: eeacms/memcached
+  env_file:
+    - .memcached.secret
+  ports:
+    - "11211:11211"
 
 data:
   build: data
