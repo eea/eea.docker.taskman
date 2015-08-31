@@ -87,6 +87,7 @@ Update the redmin's database
     $ bundle exec rake db:migrate RAILS_ENV=production
 
 If you have installed any plugins, you should also run their database migrations:
+
     $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 
 Clean up redmine
