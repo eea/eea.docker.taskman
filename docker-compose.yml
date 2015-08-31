@@ -10,6 +10,7 @@ redmine:
     - "8888:80"
   env_file:
     - .redmine.secret
+    - redmine.env
   links:
     - mysql
     - postfix
@@ -25,6 +26,7 @@ mysql:
     - /etc/localtime:/etc/localtime:ro
   env_file:
     - .mysql.secret
+    - mysql.env
 
 postfix:
   restart: always
@@ -39,6 +41,7 @@ memcached:
   image: eeacms/memcached
   env_file:
     - .memcached.secret
+    - memcached.env
   ports:
     - "11211:11211"
 

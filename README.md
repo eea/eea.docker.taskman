@@ -6,7 +6,7 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
 - Install [Docker](https://docs.docker.com/installation/)
 - Install [Compose](https://docs.docker.com/compose/install/)
 
-### Installation
+### First time installation
 
 Clone the repository
     
@@ -37,7 +37,10 @@ Start containers
 
     $ docker-compose up -d
 
-### Import data
+#### Import existing data
+
+If you already have a normal redmine installation (not dockerised) than follow the steps below to import the files and mysql db into the data container.
+
 Import files
     
     $ docker-compose up data
@@ -82,7 +85,7 @@ login to redmine
     
     $ docker exec -it eeadockerredmine_redmine_1 /bin/bash
 
-Update the redmin's database
+Update the redmine's database
     
     $ bundle exec rake db:migrate RAILS_ENV=production
 
