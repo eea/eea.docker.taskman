@@ -59,6 +59,46 @@ Start containers
 
     $ docker-compose up -d
 
+
+### Upgrade REDMINE
+
+stop all servicies
+    
+    $ docker-compose stop
+
+update repository
+    
+    $ git pull
+
+rebuild redmine container
+    
+    $ docker-compose build redmine
+
+start all
+    
+    $ docker-compose up -d
+    
+login to redmine
+    
+    $ docker exec -it eeadockerredmine_redmine_1 /bin/bash
+
+Update the redmin's database
+    
+    $ bundle exec rake db:migrate RAILS_ENV=production
+
+If you have installed any plugins, you should also run their database migrations:
+    $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+
+Clean up redmine
+
+1. Clear the cache and the existing sessions:
+    
+    $ bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production
+
+2. Exit from container and Restart all services
+
+3. Finally go to "Admin -> Roles & permissions" to check/set permissions for the new features, if any.
+
 ## How-tos
 ### How to add repository to redmine
 
