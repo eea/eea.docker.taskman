@@ -73,6 +73,10 @@ update repository
     
     $ git pull
 
+pull latest version of redmine
+
+    $ docker pull sameersbn/redmine:latest
+    
 rebuild redmine container
     
     $ docker-compose build redmine
