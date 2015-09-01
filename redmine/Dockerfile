@@ -42,4 +42,13 @@ RUN chmod +x /home/redmine/redmine/taskman_email.sh && \
 ADD cronjobs /tmp/cronjobs
 RUN crontab -u redmine /tmp/cronjobs && rm -rf /tmp/cronjobs
 
+# remove nginx start
+RUN rm -rf /etc/supervisor/conf.d/nginx.conf
+
+# after nginx's disable, it is needed to change gunicorn configuration
+RUN mkdir /tmp/eea_SETUP_DIR
+RUN cp -ar ${SETUP_DIR} /tmp/eea_SETUP_DIR
+RUN sed 's/127.0.0.1/0.0.0.0/g' -i /tmp/eea_SETUP_DIR/redmine/config/redmine/unicorn.rb
+ENV SETUP_DIR=/tmp/eea_SETUP_DIR/redmine
+
 ENTRYPOINT /home/redmine/redmine/startup.sh
