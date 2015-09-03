@@ -20,14 +20,14 @@ During the first time deployement, create the secret environment files
     $ cp .redmine.secret.example .redmine.secret
     $ cp .postfix.secret.example .postfix.secret
     $ cp .memcached.secret.example .memcached.secret
-    $ cp redmine/.email.secret.example redmine/.email.secret
+    $ cp .email.secret.example .email.secret
 
 Edit the secret files with real settings
 
     $ vim .mysql.secret
     $ vim .redmine.secret
     $ # edit email configuration for helpdesk and taskman accounts
-    $ vim redmine/.email.secret
+    $ vim .email.secret
     $ # edit email configuration for redmine
     $ vim .postfix.secret
     $ # edit memcached configuration
