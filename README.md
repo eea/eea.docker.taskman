@@ -10,8 +10,8 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
 
 Clone the repository
     
-    $ git clone https://github.com/eea/eea.docker.redmine
-    $ cd eea.docker.redmine
+    $ git clone https://github.com/eea/eea.docker.taskman
+    $ cd eea.docker.taskman
     
 During the first time deployement, create the secret environment files
 
@@ -45,16 +45,16 @@ Import files
     
     $ docker-compose up data
     $ mkdir /var/data && cp -R /path/example/files/ data/
-    $ docker run -it --rm --volumes-from eeadockerredmine_data_1 -v \
+    $ docker run -it --rm --volumes-from eeadockertaskman_data_1 -v \
       /var/data/:/mnt debian /bin/bash -c \
       "cp -R /mnt/files /home/redmine/data/files && chown -R 1000:1000 /home/redmine/data/files"
 
 Import database (replace db_production, user, pass with your values)
     
-    $ cd eea.docker.redmine
+    $ cd eea.docker.taskman
     $ cp /path/database/dump.sql.tgz backup/
     $ docker-compose up -d mysql
-    $ docker exec -i eeadockerredmine_mysql_1 /bin/bash -c \
+    $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c \
       "tar xvf /var/local/backup/dump.sql.tgz && mysql -uuser -ppass db_production < dump.sql"
     $ docker-compose stop mysql
     
@@ -75,11 +75,7 @@ update repository
 
 pull latest version of redmine
 
-    $ docker pull sameersbn/redmine:latest
-    
-rebuild redmine container
-    
-    $ docker-compose build redmine
+    $ docker pull eeacms/redmine:latest
 
 start all
     
@@ -87,7 +83,7 @@ start all
     
 login to redmine
     
-    $ docker exec -it eeadockerredmine_redmine_1 /bin/bash
+    $ docker exec -it eeadockertaskman_redmine_1 /bin/bash
 
 Update the redmine's database
     
@@ -130,7 +126,7 @@ from https://github.com/eea every 5 minutes (see */etc/cron.d/sync_git_repos* an
 
 If it still doesn't update automatically after a while:
 * login to the docker host and become root
-* enter the redmine container (docker exec -it eeadockerredmine_redmine_1 bash)
+* enter the redmine container (docker exec -it eeadockertaskman_redmine_1 bash)
 * cd /var/local/redmine/github
 * git clone --mirror https://github.com/eea/eea.mypackage.git
 * cd eea.mypackage.git
