@@ -1,6 +1,6 @@
 redmine:
   restart: always
-  image: eeacms/redmine
+  image: eeacms/redmine:3.1.1-2
   volumes_from:
     - data
   volumes:
@@ -22,7 +22,7 @@ mysql:
   volumes_from:
     - data
   volumes:
-    - backup/:/var/local/backup/
+    - ./backup/:/var/local/backup/
     - /etc/localtime:/etc/localtime:ro
   env_file:
     - .mysql.secret
