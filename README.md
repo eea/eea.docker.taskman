@@ -81,27 +81,11 @@ start all
     
     $ docker-compose up -d
     
-login to redmine
+Exit from container and Restart all services
     
-    $ docker exec -it eeadockertaskman_redmine_1 /bin/bash
+    $ docker-compose stop && docker-compose start
 
-Update the redmine's database
-    
-    $ bundle exec rake db:migrate RAILS_ENV=production
-
-If you have installed any plugins, you should also run their database migrations:
-
-    $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-
-Clean up redmine
-
-1. Clear the cache and the existing sessions:
-    
-    $ bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production
-
-2. Exit from container and Restart all services
-
-3. Finally go to "Admin -> Roles & permissions" to check/set permissions for the new features, if any.
+Finally go to "Admin -> Roles & permissions" to check/set permissions for the new features, if any.
 
 ## How-tos
 ### How to add repository to redmine
