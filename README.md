@@ -65,6 +65,10 @@ Start containers
 
 ### Upgrade REDMINE
 
+make a backup of database
+
+    $ docker exec eeadockertaskman_mysql_1 mysqldump -h localhost --add-drop-table redmine_production_db > redmine.sql
+    
 stop all servicies
     
     $ docker-compose stop
