@@ -7,7 +7,7 @@ redmine:
     - .email.secret:/var/local/environment/vars
     - /etc/localtime:/etc/localtime:ro
   ports:
-    - "8888:8080"
+    - "8889:8080"
   env_file:
     - .redmine.secret
     - redmine.env
