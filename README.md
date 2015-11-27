@@ -77,19 +77,17 @@ update repository
     
     $ git pull
 
-pull latest version of redmine
+pull latest version of redmine so to minimize waiting time during the next step
 
-    $ docker pull eeacms/redmine:latest
+    $ docker pull eeacms/redmine:<imagetag>
 
 start all
     
     $ docker-compose up -d
-    
-Exit from container and Restart all services
-    
-    $ docker-compose stop && docker-compose start
 
 Finally go to "Admin -> Roles & permissions" to check/set permissions for the new features, if any.
+
+Follow any other manual steps via redmine UI needed e.g. when adding new plugins.
 
 ## How-tos
 ### How to add repository to redmine
