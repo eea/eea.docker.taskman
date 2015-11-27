@@ -63,7 +63,7 @@ Start containers
     $ docker-compose up -d
 
 
-### Upgrade REDMINE
+### Upgrade procedure
 
 make a backup of database
 
