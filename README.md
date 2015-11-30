@@ -69,6 +69,10 @@ make a backup of database
 
     $ docker exec eeadockertaskman_mysql_1 mysqldump -h localhost --add-drop-table redmine_production_db > redmine.sql
     
+pull latest version of redmine so to minimize waiting time during the next step
+
+    $ docker pull eeacms/redmine:<imagetag>
+    
 stop all servicies
     
     $ docker-compose stop
@@ -76,10 +80,6 @@ stop all servicies
 update repository
     
     $ git pull
-
-pull latest version of redmine so to minimize waiting time during the next step
-
-    $ docker pull eeacms/redmine:<imagetag>
 
 start all
     
