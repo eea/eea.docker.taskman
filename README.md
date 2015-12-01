@@ -53,7 +53,7 @@ Import database (replace db_production, user, pass with your values)
     $ cp /path/database/dump.sql.tgz backup/
     $ docker-compose up -d mysql
     $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c \
-      "tar xvf /var/local/backup/dump.sql.tgz && mysql -u<the username> -p<your_pass> redmine < dump.sql"
+      "tar xvf /var/local/backup/dump.sql.tgz && mysql -u<mysql_user> -p<mysql_pass> redmine < dump.sql"
     $ docker-compose stop mysql
     
 Start containers
