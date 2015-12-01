@@ -43,7 +43,6 @@ If you already have a normal redmine installation (not dockerised) than follow t
 
 Import files
     
-    $ docker-compose up data
     $ mkdir /var/data && cp -R /path/example/files/ data/
     $ docker run -it --rm --volumes-from eeadockertaskman_data_1 -v \
       /var/data/:/mnt debian /bin/bash -c \
@@ -51,11 +50,10 @@ Import files
 
 Import database (replace db_production, user, pass with your values)
     
-    $ cd eea.docker.taskman
     $ cp /path/database/dump.sql.tgz backup/
     $ docker-compose up -d mysql
     $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c \
-      "tar xvf /var/local/backup/dump.sql.tgz && mysql -uuser -ppass db_production < dump.sql"
+      "tar xvf /var/local/backup/dump.sql.tgz && mysql -u<the username> -p<your_pass> redmine < dump.sql"
     $ docker-compose stop mysql
     
 Start containers
