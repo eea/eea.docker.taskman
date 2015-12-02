@@ -1,11 +1,11 @@
 redmine:
   restart: always
-  image: docker.io/eeacms/redmine:3.1.1-3
+  image: docker.io/eeacms/redmine:3.1.1-3.1
   volumes_from:
     - data
   volumes:
-    - ./.email.secret:/var/local/environment/vars
-    - /etc/localtime:/etc/localtime:ro
+    - ./.email.secret:/var/local/environment/vars:z
+    - /etc/localtime:/etc/localtime:z
   ports:
     - "8889:8080"
   env_file:
@@ -22,8 +22,8 @@ mysql:
   volumes_from:
     - data
   volumes:
-    - ./backup/:/var/local/backup/
-    - /etc/localtime:/etc/localtime:ro
+    - ./backup/:/var/local/backup/:z
+    - /etc/localtime:/etc/localtime:z
   env_file:
     - .mysql.secret
     - mysql.env
@@ -32,7 +32,7 @@ postfix:
   restart: always
   image: eeacms/postfix:eionet
   volumes:
-    - /etc/localtime:/etc/localtime:ro
+    - /etc/localtime:/etc/localtime:z
   env_file:
     - .postfix.secret
 
