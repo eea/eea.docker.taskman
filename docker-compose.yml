@@ -4,8 +4,8 @@ redmine:
   volumes_from:
     - data
   volumes:
-    - ./.email.secret:/var/local/environment/vars:z
-    - /etc/localtime:/etc/localtime:z
+    - ./.email.secret:/var/local/environment/vars
+    - /etc/localtime:/etc/localtime
   ports:
     - "8889:8080"
   env_file:
@@ -22,8 +22,8 @@ mysql:
   volumes_from:
     - data
   volumes:
-    - ./backup/:/var/local/backup/:z
-    - /etc/localtime:/etc/localtime:z
+    - ./backup/:/var/local/backup/
+    - /etc/localtime:/etc/localtime
   env_file:
     - .mysql.secret
     - mysql.env
@@ -32,7 +32,7 @@ postfix:
   restart: always
   image: eeacms/postfix:eionet
   volumes:
-    - /etc/localtime:/etc/localtime:z
+    - /etc/localtime:/etc/localtime
   env_file:
     - .postfix.secret
 
