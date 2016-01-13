@@ -4,7 +4,7 @@ redmine:
   volumes_from:
     - data
   volumes:
-    - ./.email.secret:/var/local/environment/vars
+    - ./.email.secret:/var/local/environment/vars:z
     - /etc/localtime:/etc/localtime:ro
   ports:
     - "8889:8080"
