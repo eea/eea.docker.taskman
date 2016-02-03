@@ -1,6 +1,6 @@
 redmine:
   restart: always
-  image: eeacms/redmine:3.2.0
+  image: eeacms/redmine:3.2.0-1
   volumes_from:
     - data
   volumes:
@@ -18,7 +18,7 @@ redmine:
 
 mysql:
   restart: always
-  image: eeacms/mysql:1.0
+  image: eeacms/mysql
   volumes_from:
     - data
   volumes:
