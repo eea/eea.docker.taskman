@@ -18,7 +18,7 @@ redmine:
 
 mysql:
   restart: always
-  image: eeacms/mysql
+  image: mysql:5.7.10
   volumes_from:
     - data
   volumes:
