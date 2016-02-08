@@ -32,11 +32,23 @@ Edit the secret files with real settings
     $ vim .postfix.secret
     $ # edit memcached configuration
     $ vim .memcached.secret
-    
+
+Follow [import existing data](#import-existing-data) if you need to import existing data
+
 Start containers
 
     $ docker-compose up -d
-
+    
+Update the database
+    
+    $ docker exec -it eeadockertaskman_redmine_1 bash
+    $ # update database
+    $ bundle exec rake db:migrate RAILS_ENV=production
+    $ # update plugins
+    $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+    $ # Clean up - Clear the cache and the existing sessions
+    $ bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production
+    
 #### Import existing data
 
 If you already have a normal redmine installation (not dockerised) than follow the steps below to import the files and mysql db into the data container.
@@ -46,14 +58,24 @@ Import files
     $ mkdir /var/data && cp -R /path/example/files/ data/
     $ docker run -it --rm --volumes-from eeadockertaskman_data_1 -v \
       /var/data/:/mnt debian /bin/bash -c \
-      "cp -R /mnt/files /home/redmine/data/files && chown -R 1000:1000 /home/redmine/data/files"
+      "cp -R /mnt/files /home/redmine/data/files && chown -R 500:500 /home/redmine/data/files"
 
 Import database (replace db_production, user, pass with your values)
     
-    $ cp /path/database/dump.sql.tgz backup/
     $ docker-compose up -d mysql
+    
+    if you have a backup in tgz
+    
+    $ cp /path/database/dump.sql.tgz backup/
     $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c \
       "tar xvf /var/local/backup/dump.sql.tgz && mysql -u<mysql_user> -p<mysql_pass> <db_name> < dump.sql"
+    $ docker-compose stop mysql
+    
+    or if you have a simple dump file
+    
+    $ cp /path/database/dump.sql backup/
+    $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c \
+      "mysql -u<mysql_user> -p<mysql_pass> <db_name> < /var/local/backup/dump.sql"
     $ docker-compose stop mysql
     
 Start containers
