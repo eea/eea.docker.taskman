@@ -60,7 +60,9 @@ If you already have a normal redmine installation (not dockerised) than follow t
       /var/data/:/mnt debian /bin/bash -c \
       "cp -R /mnt/files /home/redmine/data/files && chown -R 500:500 /home/redmine/data/files"
 
-##### Import database (replace db_production, user, pass with your values)
+##### Import database
+
+Replace the db_name, mysql_user and mysql_pass with your values.
 
 make a dump of the database (from production)
 
