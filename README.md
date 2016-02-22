@@ -15,22 +15,16 @@ Clone the repository
 
 During the first time deployement, create the secret environment files
 
-    $ # copy the .secret.example files
     $ cp .mysql.secret.example .mysql.secret
     $ cp .redmine.secret.example .redmine.secret
-    $ cp .postfix.secret.example .postfix.secret
     $ cp .memcached.secret.example .memcached.secret
+    $ cp .postfix.secret.example .postfix.secret
     $ cp .email.secret.example .email.secret
 
-Edit the secret files with real settings
+Edit the secret files with real settings, email settings will be setup at the end
 
     $ vim .mysql.secret
     $ vim .redmine.secret
-    $ # edit email configuration for helpdesk and taskman accounts
-    $ vim .email.secret
-    $ # edit email configuration for redmine
-    $ vim .postfix.secret
-    $ # edit memcached configuration
     $ vim .memcached.secret
 
 Start containers
@@ -51,13 +45,20 @@ Update the database
 
 #### Import existing data
 
-If you already have a normal redmine installation (not dockerised) than follow the steps below to import the files and mysql db into the data container.
+If you already have a Taskman installation than follow the steps below to import the files and mysql db into the data containers.
 
 ##### Import files
 
-    $ mkdir /var/data && cp -R /path/example/files/ data/
+Get existing files (from production)
+
+* attach & mount a volume to your host
+* rsync files from production to volume
+* you will get a structure like /<VOLUME-PATH>/<DOCKER-VOLUME-ID>/_data/..
+
+Import files
+
     $ docker run -it --rm --volumes-from eeadockertaskman_data_1 -v \
-      /var/data/:/mnt debian /bin/bash -c \
+      /<VOLUME-PATH>/<DOCKER-VOLUME-ID>/_data/:/mnt debian /bin/bash -c \
       "cp -R /mnt/files /home/redmine/data/files && chown -R 500:500 /home/redmine/data/files"
 
 ##### Import database
@@ -82,6 +83,16 @@ Import the dump file
 Start containers
 
     $ docker-compose up -d
+
+### Email settings
+
+Edit email configuration for helpdesk and taskman accounts
+
+    $ vim .email.secret
+
+Edit email configuration for redmine
+
+    $ vim .postfix.secret
 
 ### Upgrade procedure
 
