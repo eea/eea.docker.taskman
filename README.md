@@ -64,15 +64,15 @@ If you already have a normal redmine installation (not dockerised) than follow t
 
 Replace the db_name, mysql_user and mysql_pass with your values.
 
-make a dump of the database (from production)
+Make a dump of the database (from production)
 
     $ docker exec eeadockertaskman_mysql_1 mysqldump -h localhost --add-drop-table <db_name> > taskman.sql
 
-start the MySQL server
+Start the MySQL server
 
     $ docker-compose up -d mysql
 
-import the dump file
+Import the dump file
 
     $ cp /path/database/taskman.sql backup/
     $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c \
@@ -85,23 +85,23 @@ Start containers
 
 ### Upgrade procedure
 
-make a backup of database
+Make a backup of database
 
     $ docker exec eeadockertaskman_mysql_1 mysqldump -h localhost --add-drop-table <db_name> > taskman.sql
 
-pull latest version of redmine so to minimize waiting time during the next step
+Pull latest version of redmine so to minimize waiting time during the next step
 
     $ docker pull eeacms/redmine:<imagetag>
 
-stop all servicies
+Stop all servicies
 
     $ docker-compose stop
 
-update repository
+Update repository
 
     $ git pull
 
-start all
+Start all
 
     $ docker-compose up -d
 
@@ -122,7 +122,7 @@ Follow any other manual steps via redmine UI needed e.g. when adding new plugins
 * "Read more":http://www.redmine.org/projects/redmine/wiki/HowTo_keep_in_sync_your_git_repository_for_redmine
 
 2. Update users mapping for your new repository:
- 
+
 * Within Redmine Web Interface > Projects > <Project> > Settings > Repositories click on *Users* link available for your new repository and Update missing users
 
 <pre>
@@ -132,6 +132,7 @@ from https://github.com/eea every 5 minutes (see */etc/cron.d/sync_git_repos* an
 </pre>
 
 If it still doesn't update automatically after a while:
+
 * login to the docker host and become root
 * enter the redmine container (docker exec -it eeadockertaskman_redmine_1 bash)
 * cd /var/local/redmine/github
