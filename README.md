@@ -53,14 +53,14 @@ Update the database
 
 If you already have a normal redmine installation (not dockerised) than follow the steps below to import the files and mysql db into the data container.
 
-Import files
+##### Import files
 
     $ mkdir /var/data && cp -R /path/example/files/ data/
     $ docker run -it --rm --volumes-from eeadockertaskman_data_1 -v \
       /var/data/:/mnt debian /bin/bash -c \
       "cp -R /mnt/files /home/redmine/data/files && chown -R 500:500 /home/redmine/data/files"
 
-Import database (replace db_production, user, pass with your values)
+##### Import database (replace db_production, user, pass with your values)
 
 make a dump of the database (from production)
 
