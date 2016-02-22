@@ -9,10 +9,10 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
 ### First time installation
 
 Clone the repository
-    
+
     $ git clone https://github.com/eea/eea.docker.taskman
     $ cd eea.docker.taskman
-    
+
 During the first time deployement, create the secret environment files
 
     $ # copy the .secret.example files
@@ -38,9 +38,9 @@ Follow [import existing data](#import-existing-data) if you need to import exist
 Start containers
 
     $ docker-compose up -d
-    
+
 Update the database
-    
+
     $ docker exec -it eeadockertaskman_redmine_1 bash
     $ # update database
     $ bundle exec rake db:migrate RAILS_ENV=production
@@ -48,61 +48,57 @@ Update the database
     $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
     $ # Clean up - Clear the cache and the existing sessions
     $ bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production
-    
+
 #### Import existing data
 
 If you already have a normal redmine installation (not dockerised) than follow the steps below to import the files and mysql db into the data container.
 
 Import files
-    
+
     $ mkdir /var/data && cp -R /path/example/files/ data/
     $ docker run -it --rm --volumes-from eeadockertaskman_data_1 -v \
       /var/data/:/mnt debian /bin/bash -c \
       "cp -R /mnt/files /home/redmine/data/files && chown -R 500:500 /home/redmine/data/files"
 
 Import database (replace db_production, user, pass with your values)
-    
+
+    make a dump of the database (from production)
+
+    $ docker exec eeadockertaskman_mysql_1 mysqldump -h localhost --add-drop-table <db_name> > taskman.sql
+
     $ docker-compose up -d mysql
-    
-    if you have a backup in tgz
-    
-    $ cp /path/database/dump.sql.tgz backup/
+
+    if you have a dump file
+
+    $ cp /path/database/taskman.sql backup/
     $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c \
-      "tar xvf /var/local/backup/dump.sql.tgz && mysql -u<mysql_user> -p<mysql_pass> <db_name> < dump.sql"
+      "mysql -u<mysql_user> -p<mysql_pass> <db_name> < /var/local/backup/taskman.sql"
     $ docker-compose stop mysql
-    
-    or if you have a simple dump file
-    
-    $ cp /path/database/dump.sql backup/
-    $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c \
-      "mysql -u<mysql_user> -p<mysql_pass> <db_name> < /var/local/backup/dump.sql"
-    $ docker-compose stop mysql
-    
+
 Start containers
 
     $ docker-compose up -d
-
 
 ### Upgrade procedure
 
 make a backup of database
 
-    $ docker exec eeadockertaskman_mysql_1 mysqldump -h localhost --add-drop-table redmine_production_db > redmine.sql
-    
+    $ docker exec eeadockertaskman_mysql_1 mysqldump -h localhost --add-drop-table <db_name> > taskman.sql
+
 pull latest version of redmine so to minimize waiting time during the next step
 
     $ docker pull eeacms/redmine:<imagetag>
-    
+
 stop all servicies
-    
+
     $ docker-compose stop
 
 update repository
-    
+
     $ git pull
 
 start all
-    
+
     $ docker-compose up -d
 
 Finally go to "Admin -> Roles & permissions" to check/set permissions for the new features, if any.
