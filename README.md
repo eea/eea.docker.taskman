@@ -84,7 +84,7 @@ Start containers
 
     $ docker-compose up -d
 
-### Email settings
+#### Email settings
 
 Edit email configuration for helpdesk and taskman accounts
 
