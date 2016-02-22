@@ -33,11 +33,11 @@ Edit the secret files with real settings
     $ # edit memcached configuration
     $ vim .memcached.secret
 
-Follow [import existing data](#import-existing-data) if you need to import existing data
-
 Start containers
 
     $ docker-compose up -d
+
+Follow [import existing data](#import-existing-data) if you need to import existing data
 
 Update the database
 
@@ -62,7 +62,7 @@ If you already have a normal redmine installation (not dockerised) than follow t
 
 ##### Import database
 
-Replace the db_name, mysql_user and mysql_pass with your values.
+Replace the <db_name>, <mysql_user> and <mysql_pass> with your values.
 
 Make a dump of the database (from production)
 
