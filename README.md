@@ -62,13 +62,15 @@ Import files
 
 Import database (replace db_production, user, pass with your values)
 
-    make a dump of the database (from production)
+make a dump of the database (from production)
 
     $ docker exec eeadockertaskman_mysql_1 mysqldump -h localhost --add-drop-table <db_name> > taskman.sql
 
+start the MySQL server
+
     $ docker-compose up -d mysql
 
-    if you have a dump file
+import the dump file
 
     $ cp /path/database/taskman.sql backup/
     $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c \
