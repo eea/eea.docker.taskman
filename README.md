@@ -50,7 +50,7 @@ If you already have a Taskman installation than follow the steps below to import
 
 ##### Import Taskman files
 
-Get existing files (from production / <PRODUCTION_HOST>)
+Get existing files (from production / < PRODUCTION_HOST >)
 
     $ #ssh on <NEW_HOST>
     $ #mount a <NEW_VOLUME_PATH> (/var/lib/docker/volumes) to your <NEW_HOST>
@@ -78,9 +78,9 @@ Get existing files (from production / <PRODUCTION_HOST>)
 
 ##### Import Taskman database
 
-Replace the <MYSQL_DB_NAME>, <MYSQL_USER> and <MYSQL_PASSWORD> with your values.
+Replace the < MYSQL_DB_NAME >, < MYSQL_USER > and < MYSQL_PASSWORD > with your values.
 
-Make a dump of the database (from production / <PRODUCTION_HOST>)
+Make a dump of the database (from production / < PRODUCTION_HOST >)
 
     $ #ssh on <PRODUCTION_HOST> with you local account
     $ docker exec eeadockertaskman_mysql_1 mysqldump -h localhost --add-drop-table <MYSQL_DB_NAME> > taskman.sql
