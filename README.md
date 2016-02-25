@@ -28,11 +28,11 @@ Edit the secret files with real settings, email settings will be setup at the en
     $ vim .redmine.secret
     $ vim .memcached.secret
 
+Follow [import existing data](#import-existing-data) if you need to import existing data
+
 Start containers
 
     $ docker-compose up -d
-
-Follow [import existing data](#import-existing-data) if you need to import existing data
 
 Update the database
 
@@ -53,6 +53,7 @@ If you already have a Taskman installation than follow the steps below to import
 Get existing files (from production / < PRODUCTION_HOST >)
 
     $ #ssh on <NEW_HOST>
+    $ docker-conpose up -d data
     $ #mount a <NEW_VOLUME_PATH> (/var/lib/docker/volumes) to your <NEW_HOST>
 
     $ #ssh on <PRODUCTION_HOST> with you local account
@@ -80,8 +81,6 @@ Get existing files (from production / < PRODUCTION_HOST >)
 
 Replace the < MYSQL_DB_NAME >, < MYSQL_USER > and < MYSQL_PASSWORD > with your values.
 
-    $ docker-compose stop
-
 Make a dump of the database (from production / < PRODUCTION_HOST >)
 
     $ #ssh on <PRODUCTION_HOST> with you local account
@@ -98,7 +97,6 @@ Import the dump file
     $ cp <NEW_VOLUME_PATH>taskman.sql backup/
     $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c "mysql -u<MYSQL_USER> -p<MYSQL_PASSWORD> <MYSQL_DB_NAME> < /var/local/backup/taskman.sql"
     $ docker-compose stop mysql
-    $ docker-compose up -d
 
 #### Email settings
 
