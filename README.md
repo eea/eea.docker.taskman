@@ -60,7 +60,7 @@ If you already have a Taskman installation than follow the steps below to import
 Get existing files (from production / < PRODUCTION_HOST >)
 
     $ #ssh on <NEW_HOST>
-    $ docker-conpose up -d data
+    $ docker-compose up -d data
     $ #mount a <NEW_VOLUME_PATH> (/var/lib/docker/volumes) to your <NEW_HOST>
 
     $ #ssh on <PRODUCTION_HOST> with you local account
