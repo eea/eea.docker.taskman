@@ -30,6 +30,8 @@ Edit the secret files with real settings, email settings will be setup at the en
 
 Follow [import existing data](#import-existing-data) if you need to import existing data
 
+Start Taskman servicies
+
     $ docker-compose up -d
 
 Start updating Taskman
