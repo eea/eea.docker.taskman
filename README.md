@@ -80,6 +80,8 @@ Get existing files (from production / < PRODUCTION_HOST >)
 
 Replace the < MYSQL_DB_NAME >, < MYSQL_USER > and < MYSQL_PASSWORD > with your values.
 
+    $ docker-compose stop
+
 Make a dump of the database (from production / < PRODUCTION_HOST >)
 
     $ #ssh on <PRODUCTION_HOST> with you local account
@@ -94,12 +96,8 @@ Start the MySQL server
 Import the dump file
 
     $ cp <NEW_VOLUME_PATH>taskman.sql backup/
-    $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c \
-      "mysql -u <MYSQL_USER> -p <MYSQL_PASSWORD> <MYSQL_DB_NAME> < /var/local/deploy/eea.docker.taskman/backup/taskman.sql"
+    $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c "mysql -u<MYSQL_USER> -p<MYSQL_PASSWORD> <MYSQL_DB_NAME> < /var/local/backup/taskman.sql"
     $ docker-compose stop mysql
-
-Start containers
-
     $ docker-compose up -d
 
 #### Email settings
