@@ -30,19 +30,24 @@ Edit the secret files with real settings, email settings will be setup at the en
 
 Follow [import existing data](#import-existing-data) if you need to import existing data
 
-Start containers
-
     $ docker-compose up -d
 
-Update the database
+Start updating Taskman
 
     $ docker exec -it eeadockertaskman_redmine_1 bash
-    $ # update database
+
+Run this only if you updated the Redmine version
+
     $ bundle exec rake db:migrate RAILS_ENV=production
-    $ # update plugins
+
+Run this only if you updated the Redmine's plugins
+
     $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-    $ # Clean up - Clear the cache and the existing sessions
+
+Finnish updating taskman
+
     $ bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production
+    $ exit
 
 #### Import existing data
 
