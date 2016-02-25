@@ -34,22 +34,7 @@ Start Taskman servicies
 
     $ docker-compose up -d
 
-Start updating Taskman
-
-    $ docker exec -it eeadockertaskman_redmine_1 bash
-
-Run this only if you updated the Redmine version
-
-    $ bundle exec rake db:migrate RAILS_ENV=production
-
-Run this only if you updated the Redmine's plugins
-
-    $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-
-Finnish updating taskman
-
-    $ bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production
-    $ exit
+[Start updating Taskman](#start-updating-taskman) if you updated the Redmine version or if you updated the Redmine's plugins.
 
 #### Import existing data
 
@@ -144,6 +129,26 @@ Update repository
 Start all
 
     $ docker-compose up -d
+
+#### Start updating Taskman
+
+Start updating Taskman
+
+    $ docker exec -it eeadockertaskman_redmine_1 bash
+    
+Run this only if you updated the Redmine version
+
+    $ bundle exec rake db:migrate RAILS_ENV=production
+
+Run this only if you updated the Redmine's plugins
+
+    $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+
+Finnish updating taskman
+
+    $ bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production
+    $ exit
+
 
 Finally go to "Admin -> Roles & permissions" to check/set permissions for the new features, if any.
 
