@@ -100,14 +100,6 @@ Edit email configuration for redmine
 
     $ vim .postfix.secret
 
-#### END OF PROCEDURE - TODO
-
-- close production
-- re-run rsync
-- re take mysql dump
-- switch floating IP
-- open new installation
-
 ### Upgrade procedure
 
 Make a backup of database
@@ -135,7 +127,7 @@ Start all
 Start updating Taskman
 
     $ docker exec -it eeadockertaskman_redmine_1 bash
-    
+
 Run this only if you updated the Redmine version
 
     $ bundle exec rake db:migrate RAILS_ENV=production
@@ -149,8 +141,18 @@ Finnish updating taskman
     $ bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production
     $ exit
 
+### End of install/upgrade procedure(s)
 
-Finally go to "Admin -> Roles & permissions" to check/set permissions for the new features, if any.
+For this final steps you will need help from a sys admin.
+
+- close current production
+- re-run rsync files
+- re-take mysql dump
+- re-import mysql dump
+- start the new installation
+- switch floating IP
+
+Finally go to "Administration -> Roles & permissions" to check/set permissions for the new features, if any.
 
 Follow any other manual steps via redmine UI needed e.g. when adding new plugins.
 
