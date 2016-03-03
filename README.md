@@ -56,17 +56,17 @@ Get existing files (from production / < PRODUCTION_HOST >)
 
     $ #login as root
     $ rsync -e "ssh -i /root/.ssh/<SSH_TASKMAN_IMPORT_KEY>" -avz --progress <DATA_PATH> root@<NEW_HOST>:<NEW_VOLUME_PATH>
-    $ #e.g.: rsync -e "ssh -i /root/.ssh/taskman_import_data" -avz --progress /var/lib/docker/volumes/2d3cb7a66162304451a1b2ec95d93a12f0480f0733d917c00e618bf8f95525f3 root@10.46.104.54:/var/lib/docker/volumes/
+    $ #e.g.: rsync -e "ssh -i /root/.ssh/taskman_import_data" -avz --progress /var/lib/docker/volumes/2d3cb7a66162304451a1b2ec95d93a12f0480f0733d917c00e618bf8f95525f3/_data root@10.46.104.54:/var/lib/docker/volumes/
 
     $ #ssh on <NEW_HOST>
     $ #login as root
-    $ chcon -R -t svirt_sandbox_file_t <DATA_PATH>
     $ docker ps --all
     $ #copy the <NEW_CONTAINER ID> of eeadockertaskman_data_1
     $ docker inspect <NEW_CONTAINER ID>
     $ #copy from "Volumes:" the value of "/home/redmine/data:", lets call it <NEW_DATA_PATH>
     $ mv <NEW_DATA_PATH> <NEW_DATA_PATH>.orig
-    $ mv <DATA_PATH> <NEW_DATA_PATH>
+    $ cp <DATA_PATH> <NEW_DATA_PATH>
+    $ chcon -R -t svirt_sandbox_file_t <NEW_DATA_PATH>/_data
     $ chown -R 500:500 <NEW_DATA_PATH>/_data
 
 ##### Import Taskman database
