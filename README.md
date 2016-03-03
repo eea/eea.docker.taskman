@@ -149,6 +149,7 @@ For this final steps you will need help from a sys admin.
 - re-run rsync files
 - re-take mysql dump
 - re-import mysql dump
+- run upgrade commands if there is a new Redmine version
 - start the new installation
 - switch floating IP
 
