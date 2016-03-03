@@ -20,7 +20,7 @@ mysql:
   restart: always
   image: mysql:5.7.10
   volumes_from:
-    - data
+    - mysql_data
   volumes:
     - ./backup/:/var/local/backup/:z
     - /etc/localtime:/etc/localtime:ro
@@ -48,7 +48,12 @@ memcached:
 data:
   image: busybox
   volumes:
-    - /var/lib/mysql
     - /home/redmine/data
     - /home/redmine/redmine/github
   command: ['chown', '-v', '-R', '500:500', '/home/redmine/data', '/home/redmine/redmine/github']
+
+mysql_data:
+  image: busybox
+  volumes:
+    - /var/lib/mysql
+  #command: ['tail', '-f', '/dev/null']
