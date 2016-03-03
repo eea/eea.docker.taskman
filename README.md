@@ -145,7 +145,7 @@ Finnish updating taskman
 
 For this final steps you will need help from a sys admin.
 
-- close current production
+- close current production, follow [wiki here]( https://taskman.eionet.europa.eu/projects/infrastructure/wiki/How_To_Inform_on_Planned_Maintenance)
 - re-run rsync files
 - re-take mysql dump
 - re-import mysql dump
