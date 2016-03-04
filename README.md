@@ -100,6 +100,8 @@ Edit email configuration for redmine
 
     $ vim .postfix.secret
 
+IMPORTANT: test if the email notification are sent!
+
 ### Upgrade procedure
 
 Make a backup of database
