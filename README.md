@@ -64,13 +64,13 @@ Get existing files from production.
     $ rsync -e 'ssh -p 2222' -avz root@<SOURCE HOST IP>:/home/redmine/redmine/github/ /home/redmine/redmine/github/
   ```
 
-4. Close **rsync client*
+4. Close **rsync client**
 
   ```
     $ CTRL+d
   ```
 
-5. Close **rsync server*
+5. Close **rsync server**
 
   ```
     $ docker kill r-server
