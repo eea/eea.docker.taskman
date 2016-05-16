@@ -84,8 +84,6 @@ Replace the < MYSQL_ROOT_USER > and < MYSQL_ROOT_PASSWORD > with your values.
 
   ```
     $ docker exec eeadockertaskman_mysql_1 mysqldump -u<MYSQL_ROOT_USER> -p<MYSQL_ROOT_PASSWORD> --add-drop-table redmine > ./backup/taskman.sql
-    $ #copy the dump file to <NEW_HOST>
-    $ scp -i /root/.ssh/<SSH_TASKMAN_IMPORT_KEY> /var/local/deploy/eea.docker.taskman/backup/taskman.sql root@<NEW_HOST>:<NEW_VOLUME_PATH>
   ```
 
 2. Start the MySQL server and the **rsync client**.
