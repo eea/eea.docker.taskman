@@ -78,24 +78,43 @@ Get existing files from production.
 
 ##### Import Taskman database
 
-Replace the < MYSQL_DB_NAME >, < MYSQL_USER > and < MYSQL_PASSWORD > with your values.
+Replace the < MYSQL_ROOT_USER > and < MYSQL_ROOT_PASSWORD > with your values.
 
-Make a dump of the database (from production / < PRODUCTION_HOST >)
+1. Make a dump of the database from production.
 
-    $ #ssh on <PRODUCTION_HOST> with you local account
-    $ docker exec eeadockertaskman_mysql_1 mysqldump -h localhost --add-drop-table <MYSQL_DB_NAME> > taskman.sql
+  ```
+    $ docker exec eeadockertaskman_mysql_1 mysqldump -u<MYSQL_ROOT_USER> -p<MYSQL_ROOT_PASSWORD> --add-drop-table redmine > ./backup/taskman.sql
     $ #copy the dump file to <NEW_HOST>
     $ scp -i /root/.ssh/<SSH_TASKMAN_IMPORT_KEY> /var/local/deploy/eea.docker.taskman/backup/taskman.sql root@<NEW_HOST>:<NEW_VOLUME_PATH>
+  ```
 
-Start the MySQL server
+2. Start the MySQL server and the **rsync client**.
 
+  ```
+    $ docker-compose up mysql_data
     $ docker-compose up -d mysql
+    $ docker run -it --rm --name=r-client --volumes-from=eeadockertaskman_mysql_1 eeacms/rsync sh
+  ```
 
-Import the dump file
+3. Start the **rsync server**.
 
-    $ cp <NEW_VOLUME_PATH>taskman.sql backup/
-    $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c "mysql -u<MYSQL_USER> -p<MYSQL_PASSWORD> <MYSQL_DB_NAME> < /var/local/backup/taskman.sql"
-    $ docker-compose stop mysql
+  ```
+    $ docker run -it --rm --name=r-server -p 2222:22 --volumes-from=eeadockertaskman_mysql_1 -e SSH_AUTH_KEY="<SSH-KEY-FROM-R-CLIENT-ABOVE>" eeacms/rsync server
+  ```
+
+4. Import the dump file
+
+  ```
+    $ rsync -e 'ssh -p 2222' -avz root@<SOURCE HOST IP>:/var/local/backup/ /var/local/backup/
+    $ CTRL+d
+    $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c "mysql -u<MYSQL_ROOT_USER> -p<MYSQL_ROOT_PASSWORD> <MYSQL_DB_NAME> < /var/local/backup/taskman.sql"
+  ```
+
+5. Close **rsync server**
+
+  ```
+    $ docker kill r-server
+  ```
 
 #### Email settings
 
