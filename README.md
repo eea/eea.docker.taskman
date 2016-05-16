@@ -42,32 +42,39 @@ If you already have a Taskman installation than follow the steps below to import
 
 ##### Import Taskman files
 
-Get existing files (from production / < PRODUCTION_HOST >)
+Get existing files from production.
 
-    $ #ssh on <NEW_HOST>
-    $ docker-compose up -d data
-    $ #mount a <NEW_VOLUME_PATH> (/var/lib/docker/volumes) to your <NEW_HOST>
+1. Start **rsync client** on host where do you want to migrate eggrepo data.
 
-    $ #ssh on <PRODUCTION_HOST> with you local account
-    $ docker ps --all
-    $ #copy the <CONTAINER ID> of eeadockertaskman_data_1
-    $ docker inspect <CONTAINER ID>
-    $ #copy from "Volumes:" the value of "/home/redmine/data:", lets call it <DATA_PATH>
+  ```
+    $ docker-compose up data
+    $ docker run -it --rm --name=r-client --volumes-from=eeadockertaskman_data_1 eeacms/rsync sh
+  ```
 
-    $ #login as root
-    $ rsync -e "ssh -i /root/.ssh/<SSH_TASKMAN_IMPORT_KEY>" -avz --progress <DATA_PATH> root@<NEW_HOST>:<NEW_VOLUME_PATH>
-    $ #e.g.: rsync -e "ssh -i /root/.ssh/taskman_import_data" -avz --progress /var/lib/docker/volumes/2d3cb7a66162304451a1b2ec95d93a12f0480f0733d917c00e618bf8f95525f3/_data root@10.46.104.54:/var/lib/docker/volumes/
+2. Start **rsync server** on host from where do you want to migrate data.
 
-    $ #ssh on <NEW_HOST>
-    $ #login as root
-    $ docker ps --all
-    $ #copy the <NEW_CONTAINER ID> of eeadockertaskman_data_1
-    $ docker inspect <NEW_CONTAINER ID>
-    $ #copy from "Volumes:" the value of "/home/redmine/data:", lets call it <NEW_DATA_PATH>
-    $ mv <NEW_DATA_PATH> <NEW_DATA_PATH>.orig
-    $ cp <DATA_PATH> <NEW_DATA_PATH>
-    $ chcon -R -t svirt_sandbox_file_t <NEW_DATA_PATH>/_data
-    $ chown -R 500:500 <NEW_DATA_PATH>/_data
+  ```
+    $ docker run -it --rm --name=r-server -p 2222:22 --volumes-from=eeadockertaskman_data_1 -e SSH_AUTH_KEY="<SSH-KEY-FROM-R-CLIENT-ABOVE>" eeacms/rsync server
+  ```
+
+3. Within **rsync client** container from step 1 run:
+
+  ```
+    $ rsync -e 'ssh -p 2222' -avz root@<SOURCE HOST IP>:/home/redmine/data/ /home/redmine/data/
+    $ rsync -e 'ssh -p 2222' -avz root@<SOURCE HOST IP>:/home/redmine/redmine/github/ /home/redmine/redmine/github/
+  ```
+
+4. Close **rsync client*
+
+  ```
+    $ CTRL+d
+  ```
+
+5. Close **rsync server*
+
+  ```
+    $ docker kill r-server
+  ```
 
 ##### Import Taskman database
 
