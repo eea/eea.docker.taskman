@@ -123,6 +123,12 @@ Edit email configuration for helpdesk and taskman accounts
 Edit email configuration for redmine
 
     $ vim .postfix.secret
+    
+Restart postfix container
+
+    $ docker-compose stop postfix
+    $ docker-compose rm -v postfix
+    $ docker-compose up -d postfix
 
 IMPORTANT: test if the email notification are sent!
 
