@@ -119,6 +119,12 @@ Replace the < MYSQL_ROOT_USER > and < MYSQL_ROOT_PASSWORD > with your values.
 **IMPORTANT:** test first if the email notification are sent!
 Use first time the email accounts marked as **email configuration without affecting production** from the _.email.secret_ file.
 
+Features to be tested:
+
+* create ticket via email 
+* create ticket for Helpdesk
+* receive email notification on content update
+
 Edit email configuration for helpdesk and taskman accounts
 
     $ vim .email.secret
