@@ -116,7 +116,7 @@ Replace the < MYSQL_ROOT_USER > and < MYSQL_ROOT_PASSWORD > with your values.
 
 #### Email settings
 
-IMPORTANT: test first if the email notification are sent!
+**IMPORTANT:** test first if the email notification are sent!
 Use first time the email accounts marked as **email configuration without affecting production** from the _.email.secret_ file.
 
 Edit email configuration for helpdesk and taskman accounts
