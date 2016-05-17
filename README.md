@@ -44,7 +44,7 @@ If you already have a Taskman installation than follow the steps below to import
 
 Get existing files from production.
 
-1. Start **rsync client** on host where do you want to migrate eggrepo data.
+1. Start **rsync client** on host where do you want to migrate data.
 
   ```
     $ docker-compose up data
