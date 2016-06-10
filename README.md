@@ -227,3 +227,7 @@ If it still doesn't update automatically after a while:
 * cd eea.mypackage.git
 * git fetch --all
 * chown -R apache.apache .
+
+### How to use Agile plugin
+
+Complete documentation can be found at the [Agile plugin homepage](http://www.redminecrm.com/projects/agile/pages/1).
