@@ -143,7 +143,7 @@ Restart postfix container
 
 Make a backup of database
 
-    $ docker exec eeadockertaskman_mysql_1 mysqldump -h localhost --add-drop-table <MYSQL_DB_NAME> > taskman.sql
+    $ docker exec eeadockertaskman_mysql_1 mysqldump -u<MYSQL_ROOT_USER> -p<MYSQL_ROOT_PASSWORD> --add-drop-table redmine > ./backup/taskman.sql
 
 Pull latest version of redmine so to minimize waiting time during the next step
 
