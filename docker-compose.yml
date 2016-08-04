@@ -1,11 +1,12 @@
 redmine:
   restart: always
-  image: eeacms/redmine:3.2.0-5
+  image: eeacms/redmine:3.3.0
   volumes_from:
     - data
   volumes:
     - ./.email.secret:/var/local/environment/vars:z
     - /etc/localtime:/etc/localtime:ro
+    - ./plugins:/install_plugins:z
   ports:
     - "8889:8080"
   env_file:
@@ -57,3 +58,4 @@ mysql_data:
   volumes:
     - /var/lib/mysql
   #command: ['tail', '-f', '/dev/null']
+ 
