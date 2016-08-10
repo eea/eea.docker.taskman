@@ -231,3 +231,7 @@ If it still doesn't update automatically after a while:
 ### How to use Agile plugin
 
 Complete documentation can be found at the [Agile plugin homepage](http://www.redminecrm.com/projects/agile/pages/1).
+
+### How to use Checklists plugin
+
+Complete documentation can be found at the [Checklists plugin homepage](https://www.redminecrm.com/projects/checklist/pages/1).
