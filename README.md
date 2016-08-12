@@ -228,6 +228,20 @@ If it still doesn't update automatically after a while:
 * git fetch --all
 * chown -R apache.apache .
 
+### How to add check Redmine's logs
+
+    $ docker exec -it eeadockertaskman_redmine_1 bash
+    $ tail -f /home/redmine/log/redmine/production.log
+
+### How to add Redmine plugins
+
+    $ cd /var/local/deploy/eea.docker.taskman/plugins
+    $ docker-compose stop
+    $ wget <URL-TO-DOWNLOAD-ZIPPED-PLUGIN>
+    $ docker-compose up -d
+
+Follow instructions from [Start updating Taskman](https://github.com/eea/eea.docker.taskman#start-updating-taskman)
+
 ### How to use Agile plugin
 
 Complete documentation can be found at the [Agile plugin homepage](http://www.redminecrm.com/projects/agile/pages/1).
