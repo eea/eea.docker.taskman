@@ -173,12 +173,15 @@ Run this only if you updated the Redmine version
 
 Run this only if you updated the Redmine's plugins
 
+    $ bundle install --without development test
     $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 
 Finnish updating taskman
 
     $ bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production
     $ exit
+    $ docker-compose stop
+    $ docker-compose up -d
 
 ### End of install/upgrade procedure(s)
 
@@ -233,7 +236,7 @@ If it still doesn't update automatically after a while:
     $ docker exec -it eeadockertaskman_redmine_1 bash
     $ tail -f /home/redmine/log/redmine/production.log
 
-### How to add Redmine plugins
+### How to install Redmine plugins
 
     $ cd /var/local/deploy/eea.docker.taskman/plugins
     $ docker-compose stop
@@ -241,6 +244,15 @@ If it still doesn't update automatically after a while:
     $ docker-compose up -d
 
 Follow instructions from [Start updating Taskman](https://github.com/eea/eea.docker.taskman#start-updating-taskman)
+
+### How to uninstall Redmine plugins
+
+    $ docker exec -it eeadockertaskman_redmine_1 bash
+    $ bundle exec rake redmine:plugins:migrate NAME=redmine_plugin-name VERSION=0 RAILS_ENV=production
+    $ cd /var/local/deploy/eea.docker.taskman/plugins
+    $ rm <redmine_plugin-name>
+    $ docker-compose stop
+    $ docker-compose up -d
 
 ### How to use Agile plugin
 
