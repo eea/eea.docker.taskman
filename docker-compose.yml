@@ -1,6 +1,6 @@
 redmine:
   restart: always
-  image: eeacms/redmine:3.3.0-2
+  image: eeacms/redmine:3.3.0-3
   volumes_from:
     - data
   volumes:
