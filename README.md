@@ -230,7 +230,7 @@ If it still doesn't update automatically after a while:
 * git fetch --all
 * chown -R apache.apache .
 
-* "Read more":http://www.redmine.org/projects/redmine/wiki/HowTo_keep_in_sync_your_git_repository_for_redmine
+You can "read more":http://www.redmine.org/projects/redmine/wiki/HowTo_keep_in_sync_your_git_repository_for_redmine
 
 ### How to add check Redmine's logs
 
