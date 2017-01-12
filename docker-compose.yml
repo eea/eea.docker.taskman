@@ -2,7 +2,7 @@ version: "2"
 services:
   redmine:
     restart: always
-    image: eeacms/redmine:3.3-1.0
+    image: eeacms/redmine:3.3-1.1
     ports:
     - "8889:8080"
     volumes:
@@ -19,8 +19,15 @@ services:
       SMTP_ENABLED: "true"
       SMTP_HOST: "postfix"
       SMTP_PORT: "25"
+      DB_ADAPTER: "mysql2"
+      DB_HOST: "mysql"
+      DB_PORT: "3306"
     env_file:
     - .redmine.secret
+    depends_on:
+    - mysql
+    - postfix
+    - memcached
   mysql:
     restart: always
     image: mysql:5.7.10
@@ -40,7 +47,7 @@ services:
       TZ: "Europe/Copenhagen"
   memcached:
     restart: always
-    image: eeacms/memcached
+    image: image: memcached:1.4.33-alpine
     ports:
     - "11211:11211"
 
