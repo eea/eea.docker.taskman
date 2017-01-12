@@ -1,61 +1,51 @@
-redmine:
-  restart: always
-  image: eeacms/redmine:3.3.1
-  volumes_from:
-    - data
-  volumes:
-    - ./.email.secret:/var/local/environment/vars:z
-    - /etc/localtime:/etc/localtime:ro
-    - ./plugins:/install_plugins:z
-  ports:
+version: "2"
+services:
+  redmine:
+    restart: always
+    image: eeacms/redmine:3.3-1.0
+    ports:
     - "8889:8080"
-  env_file:
+    volumes:
+    - ./.email.secret:/var/local/environment/vars:z
+    - ./plugins:/install_plugins:z
+    - data:/home/redmine/data
+    - github:/home/redmine/redmine/github
+    environment:
+      TZ: "Europe/Copenhagen"
+      NGINX_ENABLED: "false"
+      NGINX_MAX_UPLOAD_SIZE: "100M"
+      NGINX_WORKERS: "auto"
+      UNICORN_TIMEOUT: "600"
+      SMTP_ENABLED: "true"
+      SMTP_HOST: "postfix"
+      SMTP_PORT: "25"
+    env_file:
     - .redmine.secret
-    - redmine.env
-  links:
-    - mysql
-    - postfix
-    - memcached
-
-mysql:
-  restart: always
-  image: mysql:5.7.10
-  volumes_from:
-    - mysql_data
-  volumes:
-    - ./backup/:/var/local/backup/:z
-    - /etc/localtime:/etc/localtime:ro
-  env_file:
+  mysql:
+    restart: always
+    image: mysql:5.7.10
+    volumes:
+    - backup:/var/local/backup
+    - mysql:/var/lib/mysql
+    environment:
+      TZ: "Europe/Copenhagen"
+    env_file:
     - .mysql.secret
-    - mysql.env
-
-postfix:
-  restart: always
-  image: eeacms/postfix:eionet
-  volumes:
-    - /etc/localtime:/etc/localtime:ro
-  env_file:
+  postfix:
+    restart: always
+    image: eeacms/postfix:eionet
+    env_file:
     - .postfix.secret
-
-memcached:
-  restart: always
-  image: eeacms/memcached
-  env_file:
-    - .memcached.secret
-    - memcached.env
-  ports:
+    environment:
+      TZ: "Europe/Copenhagen"
+  memcached:
+    restart: always
+    image: eeacms/memcached
+    ports:
     - "11211:11211"
 
-data:
-  image: busybox
-  volumes:
-    - /home/redmine/data
-    - /home/redmine/redmine/github
-  command: ['chown', '-v', '-R', '500:500', '/home/redmine/data', '/home/redmine/redmine/github']
-
-mysql_data:
-  image: busybox
-  volumes:
-    - /var/lib/mysql
-  #command: ['tail', '-f', '/dev/null']
- 
+volumes:
+  data:
+  github:
+  mysql:
+  backup:
