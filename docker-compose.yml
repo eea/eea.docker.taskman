@@ -25,7 +25,7 @@ services:
     restart: always
     image: mysql:5.7.10
     volumes:
-    - backup:/var/local/backup
+    - ./backup:/var/local/backup:z
     - mysql:/var/lib/mysql
     environment:
       TZ: "Europe/Copenhagen"
@@ -48,4 +48,3 @@ volumes:
   data:
   github:
   mysql:
-  backup:
