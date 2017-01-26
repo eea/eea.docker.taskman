@@ -236,6 +236,14 @@ You can "read more":http://www.redmine.org/projects/redmine/wiki/HowTo_keep_in_s
 
     $ docker exec -it eeadockertaskman_redmine_1 bash
     $ tail -f /home/redmine/log/redmine/production.log
+    
+### How to manually sync LDAP users/groups
+
+If you want to manually sync LDAP users and/or groups you need to run the following rake command inside the redmine container:
+
+    redmine@76547b4110ab:~/redmine$ bundle exec rake -T redmine:plugins:ldap_sync
+
+For more info see the [LDAP sync documentation](https://github.com/thorin/redmine_ldap_sync#rake-tasks)
 
 ### How to install Redmine plugins
 
@@ -255,10 +263,11 @@ Follow instructions from [Start updating Taskman](https://github.com/eea/eea.doc
     $ docker-compose stop
     $ docker-compose up -d
 
-### How to use Agile plugin
+### Specific plugins documentation
 
-Complete documentation can be found at the [Agile plugin homepage](http://www.redminecrm.com/projects/agile/pages/1).
+* [Agile plugin](http://www.redminecrm.com/projects/agile/pages/1).
+* [Checklists plugin](https://www.redminecrm.com/projects/checklist/pages/1).
+* [LDAP Sync plugin](https://github.com/thorin/redmine_ldap_sync).
 
-### How to use Checklists plugin
 
-Complete documentation can be found at the [Checklists plugin homepage](https://www.redminecrm.com/projects/checklist/pages/1).
+
