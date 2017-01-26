@@ -241,6 +241,7 @@ You can "read more":http://www.redmine.org/projects/redmine/wiki/HowTo_keep_in_s
 
 If you want to manually sync LDAP users and/or groups you need to run the following rake command inside the redmine container:
 
+    $ docker exec -it eeadockertaskman_redmine_1 bash
     redmine@76547b4110ab:~/redmine$ bundle exec rake -T redmine:plugins:ldap_sync
 
 For more info see the [LDAP sync documentation](https://github.com/thorin/redmine_ldap_sync#rake-tasks)
