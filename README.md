@@ -204,7 +204,7 @@ Follow any other manual steps via redmine UI needed e.g. when adding new plugins
 
 *Prerequisites*: You have "Manager"/"Product Owner"-role in your <Project>.
 
-1) Within Redmine Web Interface > Projects > <Project> > Settings > Repositories add New repository
+1) Within Redmine Web Interface of your project: Settings > Repositories > Add new repository
 
 * SCM: Git
 * Identifier: eea-mypackage
