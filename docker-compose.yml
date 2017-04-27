@@ -2,9 +2,9 @@ version: "2"
 services:
   redmine:
     restart: always
-    image: eeacms/redmine:3.3-1.1
+    image: eeacms/redmine:3.3-2.0
     ports:
-    - "8889:8080"
+    - "8889:3000"
     volumes:
     - ./.email.secret:/var/local/environment/vars:z
     - ./plugins:/install_plugins:z
@@ -12,16 +12,6 @@ services:
     - github:/home/redmine/redmine/github
     environment:
       TZ: "Europe/Copenhagen"
-      NGINX_ENABLED: "false"
-      NGINX_MAX_UPLOAD_SIZE: "100M"
-      NGINX_WORKERS: "auto"
-      UNICORN_TIMEOUT: "600"
-      SMTP_ENABLED: "true"
-      SMTP_HOST: "postfix"
-      SMTP_PORT: "25"
-      DB_ADAPTER: "mysql2"
-      DB_HOST: "mysql"
-      DB_PORT: "3306"
     env_file:
     - .redmine.secret
     depends_on:
@@ -47,7 +37,7 @@ services:
       TZ: "Europe/Copenhagen"
   memcached:
     restart: always
-    image: image: memcached:1.4.33-alpine
+    image: memcached:1.4.33-alpine
     ports:
     - "11211:11211"
 
