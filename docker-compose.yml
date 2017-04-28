@@ -1,47 +1,52 @@
 version: "2"
 services:
   redmine:
-    restart: always
     image: eeacms/redmine:3.3-2.0
     ports:
-    - "8889:3000"
+    - "8889:8080"
     volumes:
     - ./.email.secret:/var/local/environment/vars:z
     - ./plugins:/install_plugins:z
-    - data:/home/redmine/data
-    - github:/home/redmine/redmine/github
+    - redmine-data:/home/redmine/data
+    - redmine-github:/home/redmine/redmine/github
     environment:
       TZ: "Europe/Copenhagen"
     env_file:
     - .redmine.secret
+    - redmine.env
     depends_on:
     - mysql
     - postfix
     - memcached
+
   mysql:
-    restart: always
     image: mysql:5.7.10
     volumes:
-    - ./backup:/var/local/backup:z
-    - mysql:/var/lib/mysql
+    - ./backup/:/var/local/backup/:z
+    - /etc/localtime:/etc/localtime:ro
+    - mysql-data:/var/lib/mysql
     environment:
       TZ: "Europe/Copenhagen"
     env_file:
     - .mysql.secret
+    - mysql.env
+
   postfix:
-    restart: always
-    image: eeacms/postfix:eionet
-    env_file:
-    - .postfix.secret
+    image: eeacms/postfix:2.10-3.1
     environment:
       TZ: "Europe/Copenhagen"
+    env_file:
+    - .postfix.secret
+
   memcached:
-    restart: always
-    image: memcached:1.4.33-alpine
+    image: eeacms/memcached
     ports:
     - "11211:11211"
+    env_file:
+    - .memcached.secret
+    - memcached.env
 
 volumes:
-  data:
-  github:
-  mysql:
+  redmine-data:
+  redmine-github:
+  mysql-data:
