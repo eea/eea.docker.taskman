@@ -3,7 +3,7 @@ services:
   redmine:
     image: eeacms/redmine:3.3-2.0
     ports:
-    - "8889:8080"
+    - "8080:3000"
     volumes:
     - ./.email.secret:/var/local/environment/vars:z
     - ./plugins:/install_plugins:z
@@ -39,9 +39,12 @@ services:
     - .postfix.secret
 
   memcached:
-    image: eeacms/memcached
-    ports:
-    - "11211:11211"
+    image: memcached:1.4.36
+    environment:
+      TZ: "Europe/Copenhagen"
+    command:
+    - "-m"
+    - "2048"
     env_file:
     - .memcached.secret
     - memcached.env
