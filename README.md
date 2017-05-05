@@ -44,24 +44,28 @@ If you already have a Taskman installation than follow the steps below to import
 
 Get existing files from production.
 
-1. Start **rsync client** on host where do you want to migrate data.
+1. Start **rsync client** on host from where do you want to migrate data (production)
 
   ```
-    $ docker-compose up data
-    $ docker run -it --rm --name=r-client --volumes-from=eeadockertaskman_data_1 eeacms/rsync sh
+    $ docker run -it --rm --name=r-client \
+                 --volumes-from=eeadockertaskman_data_1 \
+             eeacms/rsync sh
   ```
 
-2. Start **rsync server** on host from where do you want to migrate data.
+2. Start **rsync server** on host from where do you want to migrate data (devel)
 
   ```
-    $ docker run -it --rm --name=r-server -p 2222:22 --volumes-from=eeadockertaskman_data_1 -e SSH_AUTH_KEY="<SSH-KEY-FROM-R-CLIENT-ABOVE>" eeacms/rsync server
+    $ docker-compose up -d data
+    $ docker run -it --rm --name=r-server -p 2222:22 \
+                 --volumes-from=eeadockertaskman_data_1 \
+                 -e SSH_AUTH_KEY="<SSH-KEY-FROM-R-CLIENT-ABOVE>" \
+             eeacms/rsync server
   ```
 
 3. Within **rsync client** container from step 1 run:
 
   ```
-    $ rsync -e 'ssh -p 2222' -avz root@<SOURCE HOST IP>:/home/redmine/data/ /home/redmine/data/
-    $ rsync -e 'ssh -p 2222' -avz root@<SOURCE HOST IP>:/home/redmine/redmine/github/ /home/redmine/redmine/github/
+    $ rsync -e 'ssh -p 2222' -avz /home/redmine/data/ root@<TARGET_HOST_IP_ON_DEVEL>:/home/redmine/data/
   ```
 
 4. Close **rsync client**
@@ -83,32 +87,45 @@ Replace the < MYSQL_ROOT_USER > and < MYSQL_ROOT_PASSWORD > with your values.
 1. Make a dump of the database from production.
 
   ```
-    $ docker exec eeadockertaskman_mysql_1 mysqldump -u<MYSQL_ROOT_USER> -p<MYSQL_ROOT_PASSWORD> --add-drop-table redmine > ./backup/taskman.sql
+    $ docker exec -it eeadockertaskman_mysql_1 bash
+      $ mysqldump -u<MYSQL_ROOT_USER> --add-drop-table redmine > ./backup/taskman.sql
+      $ exit
   ```
 
-2. Start the MySQL server and the **rsync client**.
+2. Start **rsync client** on production
 
   ```
-    $ docker-compose up mysql_data
+    $ docker run -it --rm --name=r-client \
+                 --volumes-from=eeadockertaskman_mysql_1 \
+             eeacms/rsync sh
+  ```
+
+3. Start **mysql** and the **rsync server** on devel
+
+  ```
     $ docker-compose up -d mysql
-    $ docker run -it --rm --name=r-client --volumes-from=eeadockertaskman_mysql_1 eeacms/rsync sh
+    $ docker run -it --rm --name=r-server -p 2222:22 \
+                 --volumes-from=eeadockertaskman_mysql_1 \
+                 -e SSH_AUTH_KEY="<SSH-KEY-FROM-R-CLIENT-ABOVE>" \
+             eeacms/rsync server
   ```
 
-3. Start the **rsync server**.
+4. Sync mysql dump. Within **rsync client** container from step 2 run:
 
   ```
-    $ docker run -it --rm --name=r-server -p 2222:22 --volumes-from=eeadockertaskman_mysql_1 -e SSH_AUTH_KEY="<SSH-KEY-FROM-R-CLIENT-ABOVE>" eeacms/rsync server
+    $ scp -P 2222 /var/local/backup/taskman.sql root@<TARGET_HOST_IP_ON_DEVEL>:/var/local/backup/
+    $ exit
   ```
 
-4. Import the dump file
+5. Import the dump file (on devel)
 
   ```
-    $ rsync -e 'ssh -p 2222' -avz root@<SOURCE HOST IP>:/var/local/backup/ /var/local/backup/
-    $ CTRL+d
-    $ docker exec -i eeadockertaskman_mysql_1 /bin/bash -c "mysql -u<MYSQL_ROOT_USER> -p<MYSQL_ROOT_PASSWORD> <MYSQL_DB_NAME> < /var/local/backup/taskman.sql"
+    $ docker exec -it eeadockertaskman_mysql_1 bash
+     $ mysql -u<MYSQL_ROOT_USER> <MYSQL_DB_NAME> < /var/local/backup/taskman.sql
+     $ exit
   ```
 
-5. Close **rsync server**
+6. Close **rsync server**
 
   ```
     $ docker kill r-server
@@ -121,7 +138,7 @@ Use first time the email accounts marked as **email configuration without affect
 
 Features to be tested:
 
-* create ticket via email 
+* create ticket via email
 * create ticket for Helpdesk
 * receive email notification on content update
 
@@ -132,7 +149,7 @@ Edit email configuration for helpdesk and taskman accounts
 Edit email configuration for redmine
 
     $ vim .postfix.secret
-    
+
 Restart postfix container
 
     $ docker-compose stop postfix
@@ -236,7 +253,7 @@ You can "read more":http://www.redmine.org/projects/redmine/wiki/HowTo_keep_in_s
 
     $ docker exec -it eeadockertaskman_redmine_1 bash
     $ tail -f /home/redmine/log/redmine/production.log
-    
+
 ### How to manually sync LDAP users/groups
 
 If you want to manually sync LDAP users and/or groups you need to run the following rake command inside the redmine container:
