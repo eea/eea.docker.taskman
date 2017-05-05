@@ -5,10 +5,12 @@ services:
     ports:
     - "8080:3000"
     volumes:
-    - ./.email.secret:/var/local/environment/vars:z
-    - ./plugins:/install_plugins:z
-    - redmine-data:/home/redmine/data
-    - redmine-github:/home/redmine/redmine/github
+      - ./.email.secret:/var/local/environment/vars:z
+      - ./plugins:/install_plugins:z
+      - redmine-files:/usr/src/redmine/files
+      - redmine-tmp:/usr/src/redmine/tmp
+      - redmine-plugins:/usr/src/redmine/plugins
+      - redmine-github:/var/local/redmine/github/
     environment:
       TZ: "Europe/Copenhagen"
     env_file:
@@ -50,6 +52,8 @@ services:
     - memcached.env
 
 volumes:
-  redmine-data:
+  redmine-files:
+  redmine-tmp:
   redmine-github:
+  redmine-plugins:
   mysql-data:
