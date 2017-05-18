@@ -3,8 +3,6 @@ services:
   redmine:
     image: eeacms/redmine:latest
     env_file:
-    - .redmine.secret
-    - redmine.env
     - development.env
 
   postfix:
