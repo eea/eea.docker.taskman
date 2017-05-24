@@ -16,7 +16,6 @@ services:
     env_file:
     - .redmine.secret
     - redmine.env
-    - general.env
     depends_on:
     - mysql
     - postfix

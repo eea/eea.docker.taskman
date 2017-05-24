@@ -6,4 +6,4 @@ services:
   postfix:
     image: eaudeweb/mailtrap
     ports:
-      -"8081:80"
+      - "8081:80"
