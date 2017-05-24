@@ -2,8 +2,8 @@ version: "2"
 services:
   redmine:
     image: eeacms/redmine:latest
-    env_file:
-    - development.env
 
   postfix:
     image: eaudeweb/mailtrap
+    ports:
+      -"8081:80"
