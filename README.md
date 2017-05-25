@@ -295,32 +295,34 @@ Follow instructions from [Start updating Taskman](https://github.com/eea/eea.doc
 
 1) Sync data from production:
 
-* Redmine files [Import Taskman files](https://github.com/eea/eea.docker.taskman#import-taskman-files)
-* MySQL database [Import Taskman database](https://github.com/eea/eea.docker.taskman#import-taskman-database)
+  * Redmine files [Import Taskman files](https://github.com/eea/eea.docker.taskman#import-taskman-files)
+  * MySQL database [Import Taskman database](https://github.com/eea/eea.docker.taskman#import-taskman-database)
 
 2) Update .email.secret:
 
-- change email account settings with development ones
-- change TASKMAN_URL to your dev domain
+  - change email account settings with development ones
+  - change TASKMAN_URL to your dev domain
 
 3) Start the dev containers using the folowing command:
 
+```
     $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up  -d
+```
 
 4) Disable helpdesk email accounts from the following Taskman projects:
 
-- ZOPE, IT-helpdesk, IED (CWS support)
+  - ZOPE, IT-helpdesk, IED (CWS support)
 
 5) Setup network and firewall to allow access of the devel host on the EEA email accounts.
 
 6) Change the following settings:
 
-- http://YOUR_TASKMAN_DEV_HOST/projects/zope/settings/helpdesk ( From address: support.taskmannt AT eea.europa.eu )
-- http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_contacts_helpdesk?tab=general ( From address: support.taskmannt AT eea.europa.eu )
-- http://YOUR_TASKMAN_DEV_HOST/settings?tab=notifications ( Emission email address: taskmannt AT eionet.europa.eu )
-- http://YOUR_TASKMAN_DEV_HOST/settings?tab=general ( Host name and path: YOUR_TASKMAN_DEV_HOST )
+  - http://YOUR_TASKMAN_DEV_HOST/projects/zope/settings/helpdesk ( From address: support.taskmannt AT eea.europa.eu )
+  - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_contacts_helpdesk?tab=general ( From address: support.taskmannt AT eea.europa.eu )
+  - http://YOUR_TASKMAN_DEV_HOST/settings?tab=notifications ( Emission email address: taskmannt AT eionet.europa.eu )
+  - http://YOUR_TASKMAN_DEV_HOST/settings?tab=general ( Host name and path: YOUR_TASKMAN_DEV_HOST )
 
 7) Test e-mails using mailtrap on the folowing address: http://YOUR_TASKMAN_DEV_HOST:8081
 
-- additional mailtrap settings: Settings -> Mailbox View -> Show preview pane -> CHECKED
+  - additional mailtrap settings: Settings -> Mailbox View -> Show preview pane -> CHECKED
 
