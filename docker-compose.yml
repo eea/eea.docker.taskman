@@ -62,6 +62,8 @@ services:
   logspout:
     image: gliderlabs/logspout:v3.2.2
     command: 'syslog://logcentral.eea.europa.eu:1514?filter.label=eu.europa.eionet.taskman:yes'
+    environment:
+      SYSLOG_HOSTNAME: "taskman.eionet.europa.eu"
     volumes: 
     - /var/run/docker.sock:/var/run/docker.sock
 

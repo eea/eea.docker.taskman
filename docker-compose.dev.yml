@@ -7,3 +7,7 @@ services:
     image: eaudeweb/mailtrap
     ports:
       - "8081:80"
+
+  logspout:
+    environment:
+      SYSLOG_HOSTNAME: "taskman.devecs.eea.europa.eu"
