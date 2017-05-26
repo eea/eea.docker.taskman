@@ -306,7 +306,7 @@ Follow instructions from [Start updating Taskman](https://github.com/eea/eea.doc
 3) Start the dev containers using the folowing command:
 
 ```
-    $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up  -d
+    $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 ```
 
 4) Disable helpdesk email accounts from the following Taskman projects:

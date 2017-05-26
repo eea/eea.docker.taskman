@@ -2,6 +2,8 @@ version: "2"
 services:
   redmine:
     image: eeacms/redmine:3.3-2.0
+    labels:
+      eu.europa.eionet.taskman: "yes"
     ports:
     - "8080:3000"
     volumes:
@@ -23,6 +25,8 @@ services:
 
   mysql:
     image: mysql:5.7.10
+    labels:
+      eu.europa.eionet.taskman: "yes"
     volumes:
     - ./backup/:/var/local/backup/:z
     - /etc/localtime:/etc/localtime:ro
@@ -35,6 +39,8 @@ services:
 
   postfix:
     image: eeacms/postfix:2.10-3.1
+    labels:
+      eu.europa.eionet.taskman: "yes"
     environment:
       TZ: "Europe/Copenhagen"
     env_file:
@@ -42,6 +48,8 @@ services:
 
   memcached:
     image: memcached:1.4.36
+    labels:
+      eu.europa.eionet.taskman: "yes"
     environment:
       TZ: "Europe/Copenhagen"
     command:
@@ -50,6 +58,12 @@ services:
     env_file:
     - .memcached.secret
     - memcached.env
+
+  logspout:
+    image: gliderlabs/logspout:v3.2.2
+    command: 'syslog://logcentral.eea.europa.eu:1514?filter.label=eu.europa.eionet.taskman:yes'
+    volumes: 
+    - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
   redmine-files:
