@@ -321,6 +321,7 @@ Follow instructions from [Start updating Taskman](https://github.com/eea/eea.doc
   - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_contacts_helpdesk?tab=general ( From address: support.taskmannt AT eea.europa.eu )
   - http://YOUR_TASKMAN_DEV_HOST/settings?tab=notifications ( Emission email address: taskmannt AT eionet.europa.eu )
   - http://YOUR_TASKMAN_DEV_HOST/settings?tab=general ( Host name and path: YOUR_TASKMAN_DEV_HOST )
+  - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_banner ( Banner message: This is a Taskman development replica, please do not use/login if you are not part of the development team.)
 
 7) Test e-mails using mailtrap on the folowing address: http://YOUR_TASKMAN_DEV_HOST:8081
 
