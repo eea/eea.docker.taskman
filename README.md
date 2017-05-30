@@ -141,6 +141,7 @@ Features to be tested:
 * create ticket via email
 * create ticket for Helpdesk
 * receive email notification on content update
+* email issue reminder notification
 
 Edit email configuration for helpdesk and taskman accounts
 
@@ -227,9 +228,9 @@ Follow any other manual steps via redmine UI needed e.g. when adding new plugins
 
 1) Within Redmine Web Interface of your project: Settings > Repositories > Add new repository
 
-* SCM: Git
-* Identifier: eea-mypackage
-* Path to repository: /var/local/redmine/github/eea.mypackage.git
+    - SCM: Git
+    - Identifier: eea-mypackage
+    - Path to repository: /var/local/redmine/github/eea.mypackage.git
 
 <pre>
 All local repositories within */var/local/redmine/github* folder are synced automatically
@@ -239,7 +240,7 @@ from https://github.com/eea every 5 minutes (see */etc/cron.d/sync_git_repos* an
 
 2) Update users mapping for your new repository:
 
-* Within Redmine Web Interface > Projects > <Project> > Settings > Repositories click on *Users* link available for your new repository and Update missing users
+    - Within Redmine Web Interface > Projects > <Project> > Settings > Repositories click on *Users* link available for your new repository and Update missing users
 
 If it still doesn't update automatically after a while:
 
@@ -295,13 +296,13 @@ Follow instructions from [Start updating Taskman](https://github.com/eea/eea.doc
 
 1) Sync data from production:
 
-  * Redmine files [Import Taskman files](https://github.com/eea/eea.docker.taskman#import-taskman-files)
-  * MySQL database [Import Taskman database](https://github.com/eea/eea.docker.taskman#import-taskman-database)
+    - Redmine files [Import Taskman files](https://github.com/eea/eea.docker.taskman#import-taskman-files)
+    - MySQL database [Import Taskman database](https://github.com/eea/eea.docker.taskman#import-taskman-database)
 
 2) Update .email.secret:
 
-  - change email account settings with development ones
-  - change TASKMAN_URL to your dev domain
+    - change email account settings with development ones
+    - change TASKMAN_URL to your dev domain
 
 3) Start the dev containers using the folowing command:
 
@@ -311,19 +312,29 @@ Follow instructions from [Start updating Taskman](https://github.com/eea/eea.doc
 
 4) Disable helpdesk email accounts from the following Taskman projects:
 
-  - ZOPE, IT-helpdesk, IED (CWS support)
+    - check via Redmine REST API where Helpdesk module is enabled
+      - http://YOUR_TASKMAN_DEV_HOST/projects.xml?include=enabled_modules&limit=1000
+        - <enabled_module id="111" name="contacts"/>
+        - <enabled_module id="222" name="contacts_helpdesk"/>
+      - currentlly the projects REST API is not showing all the projects. This are the known projects where the Helpdesk module is enabled:
+        - zope (IDM2 A-Team)
+        - it-helpdesk (IT Helpdesk)
+        - ied (CWS support)
+      - alternativelly you can connect to the MySQL server and do the following queries:
+        - select * from enabled_modules where name='contacts_helpdesk';
+        - select * from enabled_modules where name='contacts';
 
 5) Setup network and firewall to allow access of the devel host on the EEA email accounts.
 
 6) Change the following settings:
 
-  - http://YOUR_TASKMAN_DEV_HOST/projects/zope/settings/helpdesk ( From address: support.taskmannt AT eea.europa.eu )
-  - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_contacts_helpdesk?tab=general ( From address: support.taskmannt AT eea.europa.eu )
-  - http://YOUR_TASKMAN_DEV_HOST/settings?tab=notifications ( Emission email address: taskmannt AT eionet.europa.eu )
-  - http://YOUR_TASKMAN_DEV_HOST/settings?tab=general ( Host name and path: YOUR_TASKMAN_DEV_HOST )
-  - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_banner ( Banner message: This is a Taskman development replica, please do not use/login if you are not part of the development team.)
+    - http://YOUR_TASKMAN_DEV_HOST/projects/zope/settings/helpdesk ( From address: support.taskmannt AT eea.europa.eu )
+    - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_contacts_helpdesk?tab=general ( From address: support.taskmannt AT eea.europa.eu )
+    - http://YOUR_TASKMAN_DEV_HOST/settings?tab=notifications ( Emission email address: taskmannt AT eionet.europa.eu )
+    - http://YOUR_TASKMAN_DEV_HOST/settings?tab=general ( Host name and path: YOUR_TASKMAN_DEV_HOST )
+    - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_banner ( Banner message: This is a Taskman development replica, please do not use/login if you are not part of the development team.)
 
 7) Test e-mails using mailtrap on the folowing address: http://YOUR_TASKMAN_DEV_HOST:8081
 
-  - additional mailtrap settings: Settings -> Mailbox View -> Show preview pane -> CHECKED
+    - additional mailtrap settings: Settings -> Mailbox View -> Show preview pane -> CHECKED
 
