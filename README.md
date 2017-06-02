@@ -65,7 +65,7 @@ Get existing files from production.
 3. Within **rsync client** container from step 1 run:
 
   ```
-    $ rsync -e 'ssh -p 2222' -avz /home/redmine/data/ root@<TARGET_HOST_IP_ON_DEVEL>:/home/redmine/data/
+    $ rsync -e 'ssh -p 2222' -avz /usr/src/redmine/files/ root@<TARGET_HOST_IP_ON_DEVEL>:/usr/src/redmine/files/
   ```
 
 4. Close **rsync client**
@@ -234,8 +234,8 @@ Follow any other manual steps via redmine UI needed e.g. when adding new plugins
 
 <pre>
 All local repositories within */var/local/redmine/github* folder are synced automatically
-from https://github.com/eea every 5 minutes (see */etc/cron.d/sync_git_repos* and
-*/var/local/redmine/github/redmine.py*) so you don't have to add them manually on server side.
+from https://github.com/eea every 5 minutes (see */etc/chaperone.d/chaperone.conf* and
+*/var/local/redmine/crons/redmine_github_sync.sh*) so you don't have to add them manually on server side.
 </pre>
 
 2) Update users mapping for your new repository:
@@ -256,8 +256,12 @@ You can "read more":http://www.redmine.org/projects/redmine/wiki/HowTo_keep_in_s
 
 ### How to add check Redmine's logs
 
+    $ docker-compose logs redmine
+
+or
+
     $ docker exec -it eeadockertaskman_redmine_1 bash
-    $ tail -f /home/redmine/log/redmine/production.log
+    $ tail -f /usr/src/redmine/log/production.log
 
 ### How to manually sync LDAP users/groups
 
