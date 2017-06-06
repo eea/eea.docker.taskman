@@ -303,10 +303,11 @@ Follow instructions from [Start updating Taskman](https://github.com/eea/eea.doc
     - Redmine files [Import Taskman files](https://github.com/eea/eea.docker.taskman#import-taskman-files)
     - MySQL database [Import Taskman database](https://github.com/eea/eea.docker.taskman#import-taskman-database)
 
-2) Update .email.secret:
+2) Update *.secret files:
 
     - change email account settings with development ones
     - change TASKMAN_URL to your dev domain
+    - add a black value for now for the HELPDESK_EMAIL_KEY
 
 3) Start the dev containers using the folowing command:
 
@@ -338,7 +339,11 @@ Follow instructions from [Start updating Taskman](https://github.com/eea/eea.doc
     - http://YOUR_TASKMAN_DEV_HOST/settings?tab=general ( Host name and path: YOUR_TASKMAN_DEV_HOST )
     - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_banner ( Banner message: This is a Taskman development replica, please do not use/login if you are not part of the development team.)
 
-7) Test e-mails using mailtrap on the folowing address: http://YOUR_TASKMAN_DEV_HOST:8081
+7) Update .email.secret file:
+
+    - add value for the HELPDESK_EMAIL_KEY
+    - re-build stack, see command from step 3)
+
+8) Test e-mails using mailtrap on the folowing address: http://YOUR_TASKMAN_DEV_HOST:8081
 
     - additional mailtrap settings: Settings -> Mailbox View -> Show preview pane -> CHECKED
-
