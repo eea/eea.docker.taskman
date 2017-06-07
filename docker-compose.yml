@@ -43,6 +43,18 @@ services:
       TZ: "Europe/Copenhagen"
     env_file:
     - .mysql.secret
+    command:
+    - "--query-cache-size=0"
+    - "--query-cache-limit=64M"
+    - "--query-cache-type=0"
+    - "--innodb-buffer-pool-size=1G"
+    - "--innodb-buffer-pool-instances=4"
+    - "--net-read-timeout=7200"
+    - "--net-write-timeout=7200"
+    - "--max-allowed-packet=128M"
+    - "--tmp-table-size=384M"
+    - "--max-heap-table-size=384M"
+    - "--join-buffer-size=256M"
 
   postfix:
     image: eeacms/postfix:2.10-3.1
