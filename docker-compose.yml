@@ -61,7 +61,7 @@ services:
     - "2048"
 
   logspout:
-    image: gliderlabs/logspout:v3.2.2
+    image: gliderlabs/logspout:v3.1
     restart: always
     command: 'syslog://logcentral.eea.europa.eu:1514?filter.label=eu.europa.eionet.taskman:yes'
     environment:
