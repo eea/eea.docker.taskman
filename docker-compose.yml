@@ -16,9 +16,15 @@ services:
       - redmine-github:/var/local/redmine/github/
     environment:
       TZ: "Europe/Copenhagen"
+      NGINX_ENABLED: "false"
+      NGINX_MAX_UPLOAD_SIZE: "100M"
+      NGINX_WORKERS: "auto"
+      UNICORN_TIMEOUT: "600"
+      SMTP_ENABLED: "true"
+      SMTP_HOST: "postfix"
+      SMTP_PORT: "25"
     env_file:
     - .redmine.secret
-    - redmine.env
     depends_on:
     - mysql
     - postfix
@@ -37,7 +43,6 @@ services:
       TZ: "Europe/Copenhagen"
     env_file:
     - .mysql.secret
-    - mysql.env
 
   postfix:
     image: eeacms/postfix:2.10-3.1
