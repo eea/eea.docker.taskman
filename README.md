@@ -21,7 +21,7 @@ Clone the repository
     $ git clone https://github.com/eea/eea.docker.taskman
     $ cd eea.docker.taskman
 
-Start the Apache services
+Start the Apache service
 
     $ docker-compose -f frontend-compose.yml up -d
 
