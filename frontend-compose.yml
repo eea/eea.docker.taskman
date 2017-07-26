@@ -1,0 +1,45 @@
+version: "2"
+services:
+  apache:
+    image: eeacms/apache:2.4-2.1
+    ports:
+    - "80:80"
+    - "443:443"
+    environment:
+      APACHE_MODULES: "http2_module"
+      APACHE_CONFIG: |-
+        <VirtualHost *:80>
+            ServerName taskman.eionet.europa.eu
+            RewriteEngine On
+            RewriteRule ^(.*)$$ https://taskman.eionet.europa.eu [R=permanent,L]
+        </VirtualHost>
+        <VirtualHost *:443>
+            ServerName taskman.eionet.europa.eu
+            Protocols h2 http/1.1
+            H2ModernTLSOnly off
+            ProxyTimeout 600
+            ProxyRequests Off
+            KeepAliveTimeout 30
+            SSLEngine on
+            SSLProtocol ALL -SSLv2 -SSLv3
+            SSLCompression off
+            SSLCertificateFile /certs/server.crt
+            SSLCertificateKeyFile /certs/server.key
+            <Proxy *>
+                Order deny,allow
+                Allow from all
+            </Proxy>
+            <Location />
+                LimitRequestBody 104857600
+                RequestHeader set Host                $${HTTP_HOST}
+                RequestHeader set X-Real-IP           $${REMOTE_ADDR}
+                RequestHeader set X-Forwarded-For     $${X-Forwarded-For}
+                RequestHeader set X-Forwarded-Proto   $${REQUEST_SCHEME}
+                RequestHeader set X-Frame-Options     SAMEORIGIN
+                ProxyPass http://kvm-cph-14.pdmz.eea:8080
+            </Location>
+        </VirtualHost>
+      TZ: "Europe/Copenhagen"
+    volumes:
+    - /var/local/deploy/www-eea-certs/bundle-eionet.crt:/certs/server.crt:ro
+    - /var/local/deploy/www-eea-certs/server-eionet.key:/certs/server.key:ro

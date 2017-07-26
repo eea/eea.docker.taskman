@@ -6,7 +6,26 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
 - Install [Docker](https://docs.docker.com/installation/)
 - Install [Compose](https://docs.docker.com/compose/install/)
 
-### First time installation
+### First time installation of the Taskman frontend stack
+
+Copy the certificates
+
+    $ cd /var/local/deploy
+    $ mkdir www-eea-certs
+    $ cp bundle-eionet.crt ./www-eea-certs
+    $ cp server-eionet.key ./www-eea-certs
+
+Clone the repository
+
+    $ cd /var/local/deploy
+    $ git clone https://github.com/eea/eea.docker.taskman
+    $ cd eea.docker.taskman
+
+Start the Apache services
+
+    $ docker-compose -f frontend-compose.yml up -d
+
+### First time installation of the Taskman backend stack
 
 Clone the repository
 
@@ -18,7 +37,6 @@ During the first time deployement, create the secret environment files
 
     $ cp .mysql.secret.example .mysql.secret
     $ cp .redmine.secret.example .redmine.secret
-    $ cp .memcached.secret.example .memcached.secret
     $ cp .postfix.secret.example .postfix.secret
     $ cp .email.secret.example .email.secret
 
@@ -26,7 +44,6 @@ Edit the secret files with real settings, email settings will be setup at the en
 
     $ vim .mysql.secret
     $ vim .redmine.secret
-    $ vim .memcached.secret
 
 Follow [import existing data](#import-existing-data) if you need to import existing data
 
