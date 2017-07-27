@@ -45,7 +45,7 @@ services:
                 RequestHeader set X-Forwarded-For "%{X-Forwarded-For}e"
                 RequestHeader set X-Forwarded-Proto "%{REQUEST_SCHEME}e"
                 RequestHeader set X-Frame-Options SAMEORIGIN
-                ProxyPass http://kvm-cph-14.pdmz.eea:8080
+                ProxyPass http://kvm-cph-14.pdmz.eea:8080/
             </Location>
         </VirtualHost>
       TZ: "Europe/Copenhagen"
