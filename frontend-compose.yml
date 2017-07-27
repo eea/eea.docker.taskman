@@ -27,17 +27,24 @@ services:
             SSLCompression off
             SSLCertificateFile /certs/server.crt
             SSLCertificateKeyFile /certs/server.key
+            ErrorDocument 404 /errors/404.html
+            ErrorDocument 500 /errors/50x.html
+            ErrorDocument 501 /errors/50x.html
+            ErrorDocument 502 /errors/maintenance.html
+            ErrorDocument 503 /errors/maintenance.html
+            ErrorDocument 504 /errors/50x.html
+            ErrorDocument 505 /errors/50x.html
             <Proxy *>
                 Order deny,allow
                 Allow from all
             </Proxy>
             <Location />
                 LimitRequestBody 104857600
-                RequestHeader set Host                $${HTTP_HOST}
-                RequestHeader set X-Real-IP           $${REMOTE_ADDR}
-                RequestHeader set X-Forwarded-For     $${X-Forwarded-For}
-                RequestHeader set X-Forwarded-Proto   $${REQUEST_SCHEME}
-                RequestHeader set X-Frame-Options     SAMEORIGIN
+                RequestHeader set Host "%{HTTP_HOST}e"
+                RequestHeader set X-Real-IP "%{REMOTE_ADDR}e"
+                RequestHeader set X-Forwarded-For "%{X-Forwarded-For}e"
+                RequestHeader set X-Forwarded-Proto "%{REQUEST_SCHEME}e"
+                RequestHeader set X-Frame-Options SAMEORIGIN
                 ProxyPass http://kvm-cph-14.pdmz.eea:8080
             </Location>
         </VirtualHost>
@@ -45,3 +52,4 @@ services:
     volumes:
     - /var/local/deploy/www-eea-certs/bundle-eionet.crt:/certs/server.crt:ro
     - /var/local/deploy/www-eea-certs/server-eionet.key:/certs/server.key:ro
+    - ./html:/errors:ro
