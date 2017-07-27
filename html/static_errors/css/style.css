@@ -1,16 +1,16 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:100);
 .err404 {
-  background:  url(/static_errors/ice.gif) no-repeat center center fixed;
+  background:  url(/errors/static_errors/ice.gif) no-repeat center center fixed;
   background-size: cover;
 }
 
 .err50x {
-  background:  url(/static_errors/retrocars.gif) no-repeat center center fixed;
+  background:  url(/errors/static_errors/retrocars.gif) no-repeat center center fixed;
   background-size: cover;
 }
 
 .err50xmaintenance {
-  background:  url(/static_errors/containers.gif) no-repeat center center fixed;
+  background:  url(/errors/static_errors/containers.gif) no-repeat center center fixed;
   background-size: cover;
 }
 
