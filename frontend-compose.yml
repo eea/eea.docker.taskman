@@ -17,8 +17,6 @@ services:
             ServerName taskman.eionet.europa.eu
             Protocols h2 http/1.1
             H2ModernTLSOnly off
-            ProxyTimeout 600
-            ProxyRequests Off
             KeepAliveTimeout 30
             SSLEngine on
             SSLProtocol ALL -SSLv2 -SSLv3
@@ -42,6 +40,9 @@ services:
             <Location /errors>
                 ProxyPass !
             </Location>
+            
+            ProxyTimeout 600
+            ProxyRequests Off
             
             LimitRequestBody 104857600
             RequestHeader set Host "%{HTTP_HOST}e"
