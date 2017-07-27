@@ -30,7 +30,6 @@ services:
       eu.europa.eionet.taskman: "yes"
     volumes:
     - ./backup/:/var/local/backup/:z
-    - /etc/localtime:/etc/localtime:ro
     - mysql-data:/var/lib/mysql
     environment:
       TZ: "Europe/Copenhagen"
