@@ -57,4 +57,4 @@ services:
     volumes:
     - /var/local/deploy/www-eea-certs/bundle-eionet.crt:/certs/server.crt:ro
     - /var/local/deploy/www-eea-certs/server-eionet.key:/certs/server.key:ro
-    - ./html:/usr/local/apache2/htdocs/errors:ro
+    - ./html:/usr/local/apache2/htdocs/errors
