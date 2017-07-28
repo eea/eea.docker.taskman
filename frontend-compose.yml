@@ -15,7 +15,7 @@ services:
         </VirtualHost>
         <VirtualHost *:443>
             ServerName taskman.eionet.europa.eu
-            Protocols h2 http/1.1
+            #Protocols h2 http/1.1
             H2ModernTLSOnly off
             KeepAliveTimeout 30
             SSLEngine on
@@ -25,6 +25,9 @@ services:
             SSLCompression off
             SSLCertificateFile /certs/server.crt
             SSLCertificateKeyFile /certs/server.key
+         
+            SSLOptions +StdEnvVars       
+ 
             ErrorDocument 404 /errors/404.html
             ErrorDocument 500 /errors/50x.html
             ErrorDocument 501 /errors/50x.html
@@ -32,10 +35,6 @@ services:
             ErrorDocument 503 /errors/maintenance.html
             ErrorDocument 504 /errors/50x.html
             ErrorDocument 505 /errors/50x.html
-            <Proxy *>
-                Order deny,allow
-                Allow from all
-            </Proxy>
             
             <Location /errors>
                 ProxyPass !
@@ -44,15 +43,16 @@ services:
             ProxyTimeout 600
             ProxyRequests Off
             
-            <Location />
-              LimitRequestBody 104857600
-              RequestHeader set Host "%{HTTP_HOST}e"
-              RequestHeader set X-Real-IP "%{REMOTE_ADDR}e"
-              RequestHeader set X-Forwarded-For "%{X-Forwarded-For}e"
-              RequestHeader set X-Forwarded-Proto "%{REQUEST_SCHEME}e"
-              RequestHeader set X-Frame-Options SAMEORIGIN
-              ProxyPass http://kvm-cph-14.pdmz.eea:8080/
-            </Location>
+            RewriteEngine On
+ 
+            LimitRequestBody 104857600
+            RequestHeader set Host "%{HTTP_HOST}s"
+            RequestHeader set X-Real-IP "%{REMOTE_ADDR}s"
+            RequestHeader set X-Forwarded-For "%{X-Forwarded-For}s"
+            RequestHeader set X-Forwarded-Proto https
+            RequestHeader set X-Frame-Options SAMEORIGIN
+            RewriteRule ^(.*)$$ http://kvm-cph-14.pdmz.eea:8080$$1 [P]
+            
             
         </VirtualHost>
       TZ: "Europe/Copenhagen"
@@ -60,3 +60,9 @@ services:
     - /var/local/deploy/www-eea-certs/bundle-eionet.crt:/certs/server.crt:ro
     - /var/local/deploy/www-eea-certs/server-eionet.key:/certs/server.key:ro
     - ./html:/usr/local/apache2/htdocs/errors
+networks:
+    default:
+        driver: bridge
+        driver_opts: 
+           com.docker.network.driver.mtu: 1450
+
