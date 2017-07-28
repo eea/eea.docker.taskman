@@ -15,7 +15,7 @@ services:
         </VirtualHost>
         <VirtualHost *:443>
             ServerName taskman.eionet.europa.eu
-            #Protocols h2 http/1.1
+            Protocols h2 http/1.1
             H2ModernTLSOnly off
             KeepAliveTimeout 30
             SSLEngine on
