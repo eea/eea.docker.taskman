@@ -11,7 +11,7 @@ services:
         <VirtualHost *:80>
             ServerName taskman.eionet.europa.eu
             RewriteEngine On
-            RewriteRule ^(.*)$$ https://taskman.eionet.europa.eu [R=permanent,L]
+            RewriteRule ^(.*)$$ https://taskman.eionet.europa.eu$$1 [R=permanent,L]
         </VirtualHost>
         <VirtualHost *:443>
             ServerName taskman.eionet.europa.eu
