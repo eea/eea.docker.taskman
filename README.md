@@ -6,7 +6,92 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
 - Install [Docker](https://docs.docker.com/installation/)
 - Install [Compose](https://docs.docker.com/compose/install/)
 
-### First time installation of the Taskman frontend stack
+
+### Setting up Taskman development replica
+
+1) Clone repository
+
+```
+     $ cd /var/local/deploy
+     $ git clone https://github.com/eea/eea.docker.taskman
+     $ cd eea.docker.taskman
+```
+
+2) Copy the .zip archives containing the paid plugins into the eea.docker.taskman/plugins directory
+
+
+3) Update *.secret files - ask techlead for development values
+ 
+    - change TASKMAN_URL to your dev domain ( or TASKMAN_URL=http://localhost:8080 )
+    - add a black value for now for the HELPDESK_EMAIL_KEY
+
+
+4) Start the dev containers using the folowing command:
+
+```
+    $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+```
+
+5) Sync data from production:
+
+    - Redmine files [Import Taskman files](https://github.com/eea/eea.docker.taskman#import-taskman-files)
+    - MySQL database [Import Taskman database](https://github.com/eea/eea.docker.taskman#import-taskman-database)
+
+6)  Re-build stack
+
+```
+    $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml stop
+    $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+```
+
+7) Disable helpdesk email accounts from the following Taskman projects ( needs to be done only if database was copied from production):
+
+    - check via Redmine REST API where Helpdesk module is enabled
+      - http://YOUR_TASKMAN_DEV_HOST/projects.xml?include=enabled_modules&limit=1000
+        - <enabled_module id="111" name="contacts"/>
+        - <enabled_module id="222" name="contacts_helpdesk"/>
+      - currentlly the projects REST API is not showing all the projects. This are the known projects where the Helpdesk module is enabled:
+        - zope (IDM2 A-Team)
+        - it-helpdesk (IT Helpdesk)
+        - ied (CWS support)
+      - alternativelly you can connect to the MySQL server and do the following queries:
+        - select * from enabled_modules where name='contacts_helpdesk';
+        - select * from enabled_modules where name='contacts';
+    - delete *Incoming mail server* settings ( from *Mail server settings* )  from all projects found in previous step using the following url: http://YOUR_TASKMAN_DEV_HOST:8080/projects/<PROJECT_NAME>/settings/helpdesk
+
+
+8) If the database was copied from production, change the following settings to set-up the development mail account  :
+
+    - http://YOUR_TASKMAN_DEV_HOST/projects/zope/settings/helpdesk ( From address: support.taskmannt AT eea.europa.eu )
+    - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_contacts_helpdesk?tab=general ( From address: support.taskmannt AT eea.europa.eu )
+    - http://YOUR_TASKMAN_DEV_HOST/settings?tab=notifications ( Emission email address: taskmannt AT eionet.europa.eu )
+
+9) If the database was copied from production, set the banner to  development message
+
+    - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_banner ( Banner message: This is a Taskman development replica, please do not use/login if you are not part of the development team.)
+    
+    
+10) Setup network and firewall to allow access of the devel host on the EEA email accounts.
+
+    - Get <H_EMAIL_HOST> and <H_EMAIL_PORT> values from .email.secret file
+    - Check 
+    ```
+    $ telnet <H_EMAIL_HOST> <H_EMAIL_PORT>
+    ```
+    - If telnet command unsuccesfull, create issue in Infrastructure project to solve this
+   
+11) Change the following settings:
+
+    - http://YOUR_TASKMAN_DEV_HOST/settings?tab=general ( Host name and path: YOUR_TASKMAN_DEV_HOST )
+    
+
+12) Update .email.secret file:
+
+    - add value for the HELPDESK_EMAIL_KEY
+
+13) Test e-mails using mailtrap on the folowing address: http://YOUR_TASKMAN_DEV_HOST:8081
+
+### First time installation of the Taskman frontend stack on Production
 
 Copy the certificates
 
@@ -25,7 +110,7 @@ Start the Apache service
 
     $ docker-compose -f frontend-compose.yml up -d
 
-### First time installation of the Taskman backend stack
+### First time installation of the Taskman backend stack on Production
 
 Clone the repository
 
@@ -33,7 +118,7 @@ Clone the repository
     $ git clone https://github.com/eea/eea.docker.taskman
     $ cd eea.docker.taskman
 
-During the first time deployement, create the secret environment files
+During the first time deployment, create the secret environment files
 
     $ cp .mysql.secret.example .mysql.secret
     $ cp .redmine.secret.example .redmine.secret
@@ -59,22 +144,21 @@ If you already have a Taskman installation than follow the steps below to import
 
 ##### Import Taskman files
 
-Get existing files from production.
+Copy Taskman files from one instance ( ex. production ) to another ( ex. replica) .
 
-1. Start **rsync client** on host from where do you want to migrate data (production)
+1. Start **rsync client** on host from where do you want to migrate data (ex. production)
 
   ```
     $ docker run -it --rm --name=r-client \
-                 --volumes-from=eeadockertaskman_data_1 \
+                 --volumes-from=eeadockertaskman_redmine_1 \
              eeacms/rsync sh
   ```
 
-2. Start **rsync server** on host from where do you want to migrate data (devel)
+2. Start **rsync server** on host from where do you want to migrate data (ex. devel)
 
   ```
-    $ docker-compose up -d data
     $ docker run -it --rm --name=r-server -p 2222:22 \
-                 --volumes-from=eeadockertaskman_data_1 \
+                 --volumes-from=eeadockertaskman_redmine_1 \
                  -e SSH_AUTH_KEY="<SSH-KEY-FROM-R-CLIENT-ABOVE>" \
              eeacms/rsync server
   ```
@@ -101,15 +185,16 @@ Get existing files from production.
 
 Replace the < MYSQL_ROOT_USER > and < MYSQL_ROOT_PASSWORD > with your values.
 
-1. Make a dump of the database from production.
+1. Make a dump of the database from source server.
 
   ```
     $ docker exec -it eeadockertaskman_mysql_1 bash
-      $ mysqldump -u<MYSQL_ROOT_USER> --add-drop-table redmine > ./backup/taskman.sql
+      $ mysqldump -u<MYSQL_ROOT_USER> -p --add-drop-table <MYSQL_DB_NAME> > /var/local/backup/taskman.sql
+      <MYSQL_ROOT_PASSWORD> 
       $ exit
   ```
 
-2. Start **rsync client** on production
+2. Start **rsync client** on source server
 
   ```
     $ docker run -it --rm --name=r-client \
@@ -117,32 +202,42 @@ Replace the < MYSQL_ROOT_USER > and < MYSQL_ROOT_PASSWORD > with your values.
              eeacms/rsync sh
   ```
 
-3. Start **mysql** and the **rsync server** on devel
+3. Start **mysql** and the **rsync server** on destination server
+
+> The eeadockertaskman_mysql_1 container must be started, check documentation for start command
+
+> <SSH-KEY-FROM-R-CLIENT-ABOVE> must contain "ssh-rsa ..."
 
   ```
-    $ docker-compose up -d mysql
     $ docker run -it --rm --name=r-server -p 2222:22 \
                  --volumes-from=eeadockertaskman_mysql_1 \
                  -e SSH_AUTH_KEY="<SSH-KEY-FROM-R-CLIENT-ABOVE>" \
              eeacms/rsync server
   ```
 
-4. Sync mysql dump. Within **rsync client** container from step 2 run:
+4. Sync mysql dump. Within **rsync client** container from step 2 (source server) run:
 
   ```
     $ scp -P 2222 /var/local/backup/taskman.sql root@<TARGET_HOST_IP_ON_DEVEL>:/var/local/backup/
     $ exit
   ```
+  
+5. Close **rsync client**
 
-5. Import the dump file (on devel)
+  ```
+    $ CTRL+d
+  ```
+  
+6. Import the dump file (on destination server)
 
   ```
     $ docker exec -it eeadockertaskman_mysql_1 bash
-     $ mysql -u<MYSQL_ROOT_USER> <MYSQL_DB_NAME> < /var/local/backup/taskman.sql
+     $ mysql -u<MYSQL_ROOT_USER> -p <MYSQL_DB_NAME> < /var/local/backup/taskman.sql
+     <MYSQL_ROOT_PASSWORD>
      $ exit
   ```
 
-6. Close **rsync server**
+7. Close **rsync server**
 
   ```
     $ docker kill r-server
@@ -176,23 +271,31 @@ Restart postfix container
 
 ### Upgrade procedure
 
-Make a backup of database
+1) Make a backup of database
 
-    $ docker exec eeadockertaskman_mysql_1 mysqldump -u<MYSQL_ROOT_USER> -p<MYSQL_ROOT_PASSWORD> --add-drop-table redmine > ./backup/taskman.sql
-
-Pull latest version of redmine so to minimize waiting time during the next step
+    $ docker exec eeadockertaskman_mysql_1 mysqldump -u<MYSQL_ROOT_USER> -p --add-drop-table <MYSQL_DB_NAME> > /var/local/backup/taskman.sql
+      <MYSQL_ROOT_PASSWORD>
+      
+1) Pull latest version of redmine to minimize waiting time during the next step
 
     $ docker pull eeacms/redmine:<imagetag>
 
-Stop all servicies
+1) Stop all services
 
     $ docker-compose stop
 
-Update repository
+1) Update repository
 
     $ git pull
 
-Start all
+1) Update premium plugins located in eea.docker.taskman/plugins directory
+
+1) Backup existing plugins and remove them from plugins directory
+    
+    $ rm -rf /usr/src/redmine/plugins/*
+
+
+1) Start all
 
     $ docker-compose up -d
 
@@ -215,7 +318,7 @@ Run this only when installing premium plugins ( make sure you have the plugins a
 
     $ ./install_plugins.sh
 
-Finnish updating taskman
+Finish updating taskman
 
     $ bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production
     $ exit
@@ -237,6 +340,7 @@ For this final steps you will need help from a sys admin.
 Finally go to "Administration -> Roles & permissions" to check/set permissions for the new features, if any.
 
 Follow any other manual steps via redmine UI needed e.g. when adding new plugins.
+
 
 ## How-tos
 ### How to add repository to redmine
@@ -313,54 +417,3 @@ Follow instructions from [Start updating Taskman](https://github.com/eea/eea.doc
 * [Checklists plugin](https://www.redminecrm.com/projects/checklist/pages/1).
 * [LDAP Sync plugin](https://github.com/thorin/redmine_ldap_sync).
 
-### Setting up Taskman development replica
-
-1) Sync data from production:
-
-    - Redmine files [Import Taskman files](https://github.com/eea/eea.docker.taskman#import-taskman-files)
-    - MySQL database [Import Taskman database](https://github.com/eea/eea.docker.taskman#import-taskman-database)
-
-2) Update *.secret files:
-
-    - change email account settings with development ones
-    - change TASKMAN_URL to your dev domain
-    - add a black value for now for the HELPDESK_EMAIL_KEY
-
-3) Start the dev containers using the folowing command:
-
-```
-    $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
-```
-
-4) Disable helpdesk email accounts from the following Taskman projects:
-
-    - check via Redmine REST API where Helpdesk module is enabled
-      - http://YOUR_TASKMAN_DEV_HOST/projects.xml?include=enabled_modules&limit=1000
-        - <enabled_module id="111" name="contacts"/>
-        - <enabled_module id="222" name="contacts_helpdesk"/>
-      - currentlly the projects REST API is not showing all the projects. This are the known projects where the Helpdesk module is enabled:
-        - zope (IDM2 A-Team)
-        - it-helpdesk (IT Helpdesk)
-        - ied (CWS support)
-      - alternativelly you can connect to the MySQL server and do the following queries:
-        - select * from enabled_modules where name='contacts_helpdesk';
-        - select * from enabled_modules where name='contacts';
-
-5) Setup network and firewall to allow access of the devel host on the EEA email accounts.
-
-6) Change the following settings:
-
-    - http://YOUR_TASKMAN_DEV_HOST/projects/zope/settings/helpdesk ( From address: support.taskmannt AT eea.europa.eu )
-    - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_contacts_helpdesk?tab=general ( From address: support.taskmannt AT eea.europa.eu )
-    - http://YOUR_TASKMAN_DEV_HOST/settings?tab=notifications ( Emission email address: taskmannt AT eionet.europa.eu )
-    - http://YOUR_TASKMAN_DEV_HOST/settings?tab=general ( Host name and path: YOUR_TASKMAN_DEV_HOST )
-    - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_banner ( Banner message: This is a Taskman development replica, please do not use/login if you are not part of the development team.)
-
-7) Update .email.secret file:
-
-    - add value for the HELPDESK_EMAIL_KEY
-    - re-build stack, see command from step 3)
-
-8) Test e-mails using mailtrap on the folowing address: http://YOUR_TASKMAN_DEV_HOST:8081
-
-    - additional mailtrap settings: Settings -> Mailbox View -> Show preview pane -> CHECKED
