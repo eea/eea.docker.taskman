@@ -271,63 +271,68 @@ Restart postfix container
 
 ### Upgrade procedure
 
+#### Cleanup & Backup before upgrade
+
 1) Make a backup of database
 
-    $ docker exec -it eeadockertaskman_mysql_1 sh -c "mysqldump -u<MYSQL_ROOT_USER> -p<MYSQL_ROOT_PASSWORD> --add-drop-table <MYSQL_DB_NAME> > /var/local/backup/taskman.sql"
+       $ docker exec -it eeadockertaskman_mysql_1 sh -c "mysqldump -u<MYSQL_ROOT_USER> -p<MYSQL_ROOT_PASSWORD> --add-drop-table <MYSQL_DB_NAME> > /var/local/backup/taskman.sql"
       
 1) Pull latest version of redmine to minimize waiting time during the next step
 
-    $ docker pull eeacms/redmine:<imagetag>
+       $ docker pull eeacms/redmine:<imagetag>
 
 1) Update repository
 
-    $ git pull
-
-1) Update premium plugins ( .zip archives ) located in eea.docker.taskman/plugins directory
+       $ git pull
 
 1) Backup existing plugins and remove them from plugins directory
     
-    $ docker exec -it eeadockertaskman_redmine_1 sh -c "rm -rf /usr/src/redmine/plugins/*"
+       $ docker exec -it eeadockertaskman_redmine_1 sh -c "rm -rf /usr/src/redmine/plugins/*"
 
 1) Stop all services
 
-    $ docker-compose stop
+       $ docker-compose stop
     
-1) Remove redmine container to recreate plugins 
+1) Remove redmine container to be able to recreate plugins from image
    
-    $ docker-compose rm redmine
+       $ docker-compose rm redmine
 
 1) Start all
 
-    $ docker-compose up -d
+       $ docker-compose up -d
 
-#### Start updating Taskman
+#### Upgrade Redmine version
 
 Start updating Taskman
 
     $ docker exec -it eeadockertaskman_redmine_1 bash
-
-Run this only if you updated the Redmine version
-
     $ bundle exec rake db:migrate RAILS_ENV=production
 
+If required by the migrate, run 
 
-Run this only when installing premium plugins ( make sure you have the plugins archives available in /install_plugins - see volume mapping in docker-compose.yml )
+    $ bundle install
 
-    $ ./install_plugins.sh
-    
-Run this only if you updated the Redmine's plugins 
-
-    $ bundle install --without development test
-    $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-
-
-Finish updating taskman
+Finish upgrade
 
     $ bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production
     $ exit
-    $ docker-compose stop
-    $ docker-compose up -d
+    $ docker-compose stop redmine
+    $ docker-compose start redmine
+
+
+#### Upgrade premium plugins
+
+Update premium plugins ( .zip archives ) located in eea.docker.taskman/plugins directory
+
+    $ docker exec -it eeadockertaskman_redmine_1 bash
+    $ ./install_plugins.sh
+    
+#### Upgrade Redmine's plugins 
+    
+Does not need to be run if install_plugins.sh was executed
+
+    $ bundle install --without development test
+    $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 
 ### End of install/upgrade procedure(s)
 
