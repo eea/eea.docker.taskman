@@ -22,7 +22,8 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
 
 3) Update *.secret files - ask techlead for development values
  
-    - change TASKMAN_URL to your dev domain ( or TASKMAN_URL=http://YOUR_TASKMAN_DEV_HOST:8080 ) 
+    - change TASKMAN_URL to your dev domain ( .email.secret ) 
+    - change SYNC_REDMINE_URL to your dev domain  ( .redmine.secret ) 
     - add a black value for now for the HELPDESK_EMAIL_KEY
 
 
