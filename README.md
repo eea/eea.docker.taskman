@@ -273,27 +273,29 @@ Restart postfix container
 
 1) Make a backup of database
 
-    $ docker exec eeadockertaskman_mysql_1 mysqldump -u<MYSQL_ROOT_USER> -p --add-drop-table <MYSQL_DB_NAME> > /var/local/backup/taskman.sql
-      <MYSQL_ROOT_PASSWORD>
+    $ docker exec -it eeadockertaskman_mysql_1 sh -c "mysqldump -u<MYSQL_ROOT_USER> -p<MYSQL_ROOT_PASSWORD> --add-drop-table <MYSQL_DB_NAME> > /var/local/backup/taskman.sql"
       
 1) Pull latest version of redmine to minimize waiting time during the next step
 
     $ docker pull eeacms/redmine:<imagetag>
 
-1) Stop all services
-
-    $ docker-compose stop
-
 1) Update repository
 
     $ git pull
 
-1) Update premium plugins located in eea.docker.taskman/plugins directory
+1) Update premium plugins ( .zip archives ) located in eea.docker.taskman/plugins directory
 
 1) Backup existing plugins and remove them from plugins directory
     
-    $ rm -rf /usr/src/redmine/plugins/*
+    $ docker exec -it eeadockertaskman_redmine_1 sh -c "rm -rf /usr/src/redmine/plugins/*"
 
+1) Stop all services
+
+    $ docker-compose stop
+    
+1) Remove redmine container to recreate plugins 
+   
+    $ docker-compose rm redmine
 
 1) Start all
 
@@ -309,14 +311,16 @@ Run this only if you updated the Redmine version
 
     $ bundle exec rake db:migrate RAILS_ENV=production
 
-Run this only if you updated the Redmine's plugins
-
-    $ bundle install --without development test
-    $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 
 Run this only when installing premium plugins ( make sure you have the plugins archives available in /install_plugins - see volume mapping in docker-compose.yml )
 
     $ ./install_plugins.sh
+    
+Run this only if you updated the Redmine's plugins 
+
+    $ bundle install --without development test
+    $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+
 
 Finish updating taskman
 
