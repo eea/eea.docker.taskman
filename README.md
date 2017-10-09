@@ -79,7 +79,6 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
 
     - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_contacts_helpdesk?tab=general ( From address: support.taskmannt AT eea.europa.eu )
     - http://YOUR_TASKMAN_DEV_HOST/settings?tab=notifications ( Emission email address: taskmannt AT eionet.europa.eu )
-    - http://YOUR_TASKMAN_DEV_HOST/settings?tab=mail_handler ( 
 
 10) If the database was copied from production, set the banner to  development message
 
@@ -100,7 +99,7 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
     - http://YOUR_TASKMAN_DEV_HOST/settings?tab=general ( Host name and path: YOUR_TASKMAN_DEV_HOST )
     
 
-13) Update .email.secret file:
+13) Update .email.secret file with API key:
 
     - add value from http://YOUR_TASKMAN_DEV_HOST/settings?tab=mail_handler, "API key" to HELPDESK_EMAIL_KEY
        
