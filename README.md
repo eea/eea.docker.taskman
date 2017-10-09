@@ -139,7 +139,7 @@ Start Taskman servicies
 
     $ docker-compose up -d
 
-[Start updating Taskman](#start-updating-taskman) if you updated the Redmine version or if you updated the Redmine's plugins.
+[Start updating Taskman](#upgrade-procedure) if you updated the Redmine version or if you updated the Redmine's plugins.
 
 #### Import existing data
 
@@ -274,6 +274,11 @@ Restart postfix container
 
 ### Upgrade procedure
 
+#### Only for upgrade to 3.2.4 ( 09.10.2017 )
+
+Uninstall redmine_mail_reminder plugin using  [Uninstall plugins](#how-to-uninstall-redmine-plugins)
+
+
 #### Cleanup & Backup before upgrade
 
 1) Make a backup of database
@@ -329,6 +334,8 @@ Update premium plugins ( .zip archives ) located in eea.docker.taskman/plugins d
 
     $ docker exec -it eeadockertaskman_redmine_1 bash
     $ ./install_plugins.sh
+    $ docker-compose stop redmine
+    $ docker-compose start redmine
     
 #### Upgrade Redmine's plugins 
     
@@ -405,7 +412,7 @@ If you want to manually sync LDAP users and/or groups you need to run the follow
 
 For more info see the [LDAP sync documentation](https://github.com/thorin/redmine_ldap_sync#rake-tasks)
 
-### How to install Redmine plugins
+### How to install Redmine  Premium plugins
 
     $ cd /var/local/deploy/eea.docker.taskman/plugins
     $ docker-compose stop
@@ -414,14 +421,30 @@ For more info see the [LDAP sync documentation](https://github.com/thorin/redmin
 
 Follow instructions from [Start updating Taskman](https://github.com/eea/eea.docker.taskman#start-updating-taskman)
 
-### How to uninstall Redmine plugins
+### How to uninstall Redmine Premium plugins
 
     $ docker exec -it eeadockertaskman_redmine_1 bash
     $ bundle exec rake redmine:plugins:migrate NAME=redmine_plugin-name VERSION=0 RAILS_ENV=production
+    $ exit
     $ cd /var/local/deploy/eea.docker.taskman/plugins
-    $ rm <redmine_plugin-name>
+    $ rm -rf <redmine_plugin-name>.zip
     $ docker-compose stop
     $ docker-compose up -d
+
+
+### How to uninstall Redmine plugins
+
+1) Uninstall plugin 
+
+       $ docker exec -it eeadockertaskman_redmine_1 bash
+       $ bundle exec rake redmine:plugins:migrate NAME=redmine_plugin-name VERSION=0 RAILS_ENV=production
+       $ cd plugins
+       $ rm -rf <redmine_plugin-name>
+       $ exit
+       $ docker-compose stop
+       $ docker-compose up -d
+
+2) Make sure the plugin is removed from docker image
 
 ### Specific plugins documentation
 
