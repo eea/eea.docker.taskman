@@ -45,7 +45,14 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
     $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 ```
 
-7) Disable helpdesk email accounts from the following Taskman projects ( needs to be done only if database was copied from production):
+7) Give user administrator rights, if necessary:
+
+        $ docker exec -it eeadockertaskman_mysql_1 bash
+        $ mysql -u<MYSQL_ROOT_USER> -p<MYSQL_ROOT_PASSWORD> <MYSQL_DB_NAME>           
+        $ update users set admin=1 where login=<USER_NAME>;
+        $ exit
+
+8) Disable helpdesk email accounts from the following Taskman projects ( needs to be done only if database was copied from production):
 
     - check via Redmine REST API where Helpdesk module is enabled
       - http://YOUR_TASKMAN_DEV_HOST/projects.xml?include=enabled_modules&limit=1000
@@ -63,18 +70,18 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
     - delete *Incoming mail server* settings ( from *Mail server settings* )  from all projects excluding zope found in previous step using the following url: http://YOUR_TASKMAN_DEV_HOST:8080/projects/<PROJECT_IDENTIFIER>/settings/helpdesk 
 
 
-8) If the database was copied from production, change the following settings to set-up the development mail account  :
+9) If the database was copied from production, change the following settings to set-up the development mail account  :
 
     - http://YOUR_TASKMAN_DEV_HOST/projects/zope/settings/helpdesk ( From address: support.taskmannt AT eea.europa.eu )
     - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_contacts_helpdesk?tab=general ( From address: support.taskmannt AT eea.europa.eu )
     - http://YOUR_TASKMAN_DEV_HOST/settings?tab=notifications ( Emission email address: taskmannt AT eionet.europa.eu )
 
-9) If the database was copied from production, set the banner to  development message
+10) If the database was copied from production, set the banner to  development message
 
     - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_banner ( Banner message: This is a Taskman development replica, please do not use/login if you are not part of the development team.)
     
     
-10) Setup network and firewall to allow access of the devel host on the EEA email accounts.
+11) Setup network and firewall to allow access of the devel host on the EEA email accounts.
 
     - Get <H_EMAIL_HOST> and <H_EMAIL_PORT> values from .email.secret file
     - Check 
@@ -83,16 +90,16 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
     ```
     - If telnet command unsuccesfull, create issue in Infrastructure project to solve this
    
-11) Change the following settings:
+12) Change the following settings:
 
     - http://YOUR_TASKMAN_DEV_HOST/settings?tab=general ( Host name and path: YOUR_TASKMAN_DEV_HOST )
     
 
-12) Update .email.secret file:
+13) Update .email.secret file:
 
     - add value for the HELPDESK_EMAIL_KEY
 
-13) Test e-mails using mailtrap on the folowing address: http://YOUR_TASKMAN_DEV_HOST:8081
+14) Test e-mails using mailtrap on the folowing address: http://YOUR_TASKMAN_DEV_HOST:8081
 
 ### First time installation of the Taskman frontend stack on Production
 
