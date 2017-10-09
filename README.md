@@ -72,9 +72,14 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
 
 9) If the database was copied from production, change the following settings to set-up the development mail account  :
 
-    - http://YOUR_TASKMAN_DEV_HOST/projects/zope/settings/helpdesk ( From address: support.taskmannt AT eea.europa.eu )
+    - http://YOUR_TASKMAN_DEV_HOST/projects/zope/settings/helpdesk :
+        -  From address: support.taskmannt AT eea.europa.eu 
+        -  User name: support.taskmannt AT eea.europa.eu
+        -  Password  
+
     - http://YOUR_TASKMAN_DEV_HOST/settings/plugin/redmine_contacts_helpdesk?tab=general ( From address: support.taskmannt AT eea.europa.eu )
     - http://YOUR_TASKMAN_DEV_HOST/settings?tab=notifications ( Emission email address: taskmannt AT eionet.europa.eu )
+    - http://YOUR_TASKMAN_DEV_HOST/settings?tab=mail_handler ( 
 
 10) If the database was copied from production, set the banner to  development message
 
@@ -97,7 +102,8 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
 
 13) Update .email.secret file:
 
-    - add value for the HELPDESK_EMAIL_KEY
+    - add value from http://YOUR_TASKMAN_DEV_HOST/settings?tab=mail_handler, "API key" to HELPDESK_EMAIL_KEY
+       
 
 14) Test e-mails using mailtrap on the folowing address: http://YOUR_TASKMAN_DEV_HOST:8081
 
