@@ -24,7 +24,7 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
  
     - change TASKMAN_URL to your dev domain ( .email.secret ) 
     - change SYNC_REDMINE_URL to your dev domain  ( .redmine.secret ) 
-    - add a black value for now for the HELPDESK_EMAIL_KEY
+    - add a blank value for now for the HELPDESK_EMAIL_KEY
 
 
 4) Start the dev containers using the folowing command:
@@ -58,7 +58,9 @@ Taskman is a web application based on [Redmine](http://www.redmine.org) that fac
       - alternativelly you can connect to the MySQL server and do the following queries:
         - select * from enabled_modules where name='contacts_helpdesk';
         - select * from enabled_modules where name='contacts';
-    - delete *Incoming mail server* settings ( from *Mail server settings* )  from all projects found in previous step using the following url: http://YOUR_TASKMAN_DEV_HOST:8080/projects/<PROJECT_NAME>/settings/helpdesk
+        - select identifier, name, id from projects where id in ( select project_id from enabled_modules where name='contacts_helpdesk' union all select project_id from enabled_modules where name='contacts_helpdesk');
+        
+    - delete *Incoming mail server* settings ( from *Mail server settings* )  from all projects excluding zope found in previous step using the following url: http://YOUR_TASKMAN_DEV_HOST:8080/projects/<PROJECT_IDENTIFIER>/settings/helpdesk 
 
 
 8) If the database was copied from production, change the following settings to set-up the development mail account  :
