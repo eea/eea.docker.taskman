@@ -48,6 +48,25 @@ services:
     - "--max-heap-table-size=384M"
     - "--join-buffer-size=256M"
 
+
+  mysql-backup:
+    image: eeacms/mysql-backup
+    restart: always
+    labels:
+      eu.europa.eionet.taskman: "yes"
+    links:
+     - mysql:db
+    env_file:
+     - .mysql.secret
+    volumes:
+     - /var/lib/docker/volumes/taskman_mysql_backup/:/db
+    environment:
+     - DB_DUMP_TARGET=/db
+     - DB_DUMP_FREQ=1440
+     - DB_DUMP_BEGIN=1720
+     - DB_DUMP_FILENAME=taskman_db_dump
+     - DB_DUMP_FILEDATE=no
+
   postfix:
     image: eeacms/postfix:2.10-3.1
     restart: always
