@@ -2,7 +2,7 @@ version: "2"
 services:
   redmine:
     image: eeacms/redmine:3.4-3.4
-    restart: always
+    restart: unless-stopped
     labels:
       eu.europa.eionet.taskman: "yes"
     ports:
@@ -25,7 +25,7 @@ services:
 
   mysql:
     image: mysql:5.7.10
-    restart: always
+    restart: unless-stopped
     labels:
       eu.europa.eionet.taskman: "yes"
     volumes:
@@ -51,7 +51,7 @@ services:
 
   mysql-backup:
     image: eeacms/mysql-backup
-    restart: always
+    restart: unless-stopped
     labels:
       eu.europa.eionet.taskman: "yes"
     links:
@@ -69,7 +69,7 @@ services:
 
   postfix:
     image: eeacms/postfix:2.10-3.1
-    restart: always
+    restart: unless-stopped
     labels:
       eu.europa.eionet.taskman: "yes"
     environment:
@@ -79,7 +79,7 @@ services:
 
   memcached:
     image: memcached:1.4.36
-    restart: always
+    restart: unless-stopped
     labels:
       eu.europa.eionet.taskman: "yes"
     environment:
@@ -90,7 +90,7 @@ services:
 
   logspout:
     image: gliderlabs/logspout:v3.1
-    restart: always
+    restart: unless-stopped
     command: 'syslog://logcentral.eea.europa.eu:1514?filter.label=eu.europa.eionet.taskman:yes'
     environment:
       SYSLOG_HOSTNAME: "taskman.eionet.europa.eu"

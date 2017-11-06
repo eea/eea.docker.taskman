@@ -2,6 +2,7 @@ version: "2"
 services:
   apache:
     image: eeacms/apache:2.4-2.1
+    restart: unless-stopped
     ports:
     - "80:80"
     - "443:443"
@@ -25,9 +26,9 @@ services:
             SSLCompression off
             SSLCertificateFile /certs/server.crt
             SSLCertificateKeyFile /certs/server.key
-         
-            SSLOptions +StdEnvVars       
- 
+
+            SSLOptions +StdEnvVars
+
             ErrorDocument 404 /errors/404.html
             ErrorDocument 500 /errors/50x.html
             ErrorDocument 501 /errors/50x.html
@@ -35,16 +36,16 @@ services:
             ErrorDocument 503 /errors/maintenance.html
             ErrorDocument 504 /errors/50x.html
             ErrorDocument 505 /errors/50x.html
-            
+
             <Location /errors>
                 ProxyPass !
             </Location>
-            
+
             ProxyTimeout 600
             ProxyRequests Off
-            
+
             RewriteEngine On
- 
+
             LimitRequestBody 104857600
             RequestHeader set Host "%{HTTP_HOST}s"
             RequestHeader set X-Real-IP "%{REMOTE_ADDR}s"
@@ -52,8 +53,8 @@ services:
             RequestHeader set X-Forwarded-Proto https
             RequestHeader set X-Frame-Options SAMEORIGIN
             RewriteRule ^(.*)$$ http://kvm-cph-14.pdmz.eea:8080$$1 [P]
-            
-            
+
+
         </VirtualHost>
       TZ: "Europe/Copenhagen"
     volumes:
@@ -63,6 +64,6 @@ services:
 networks:
     default:
         driver: bridge
-        driver_opts: 
+        driver_opts:
            com.docker.network.driver.mtu: 1450
 
