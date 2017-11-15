@@ -88,15 +88,6 @@ services:
     - "-m"
     - "2048"
 
-  logspout:
-    image: gliderlabs/logspout:v3.1
-    restart: unless-stopped
-    command: 'syslog://logcentral.eea.europa.eu:1514?filter.label=eu.europa.eionet.taskman:yes'
-    environment:
-      SYSLOG_HOSTNAME: "taskman.eionet.europa.eu"
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-
 volumes:
   redmine-files:
   redmine-tmp:
