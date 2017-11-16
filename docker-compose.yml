@@ -1,7 +1,7 @@
 version: "2"
 services:
   redmine:
-    image: eeacms/redmine:3.4-3.5
+    image: eeacms/redmine:3.4-3.6
     restart: unless-stopped
     labels:
       eu.europa.eionet.taskman: "yes"
