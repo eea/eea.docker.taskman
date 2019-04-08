@@ -1,3 +1,5 @@
+## DEPRECATED - moved into Rancehr catalog
+
 ## EEA Taskman docker setup
 Taskman is a web application based on [Redmine](http://www.redmine.org) that facilitates Agile project management for EEA and Eionet software projects. It comes with some plugins and specific Eionet redmine theme.
 
